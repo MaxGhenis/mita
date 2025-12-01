@@ -4,6 +4,7 @@ import mitaData from '../data/mitaData.json';
 
 interface RDDChartProps {
   outcome: 'consumption' | 'stunting' | 'roads';
+  phase?: 'dots' | 'ols' | 'effect'; // Progressive reveal phase
 }
 
 interface DistrictData {
@@ -99,7 +100,7 @@ const outcomeLabels = {
   roads: 'Road density in km (2006)',
 };
 
-const RDDChart: React.FC<RDDChartProps> = ({ outcome }) => {
+const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [tooltip, setTooltip] = useState<{ x: number; y: number; data: any } | null>(null);
 
@@ -277,6 +278,9 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome }) => {
       .x(d => xScale(d.distance))
       .y(d => yScale(d.fitted));
 
+    // Show OLS lines only in 'ols' or 'effect' phase
+    const showOLS = phase === 'ols' || phase === 'effect';
+
     g.select('.fitted-line-inside')
       .datum(insideLine)
       .transition()
@@ -284,7 +288,8 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome }) => {
       .attr('d', lineGenerator)
       .attr('fill', 'none')
       .attr('stroke', '#c0392b')
-      .attr('stroke-width', 3);
+      .attr('stroke-width', 3)
+      .attr('opacity', showOLS ? 1 : 0);
 
     g.select('.fitted-line-outside')
       .datum(outsideLine)
@@ -293,7 +298,11 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome }) => {
       .attr('d', lineGenerator)
       .attr('fill', 'none')
       .attr('stroke', '#718096')
-      .attr('stroke-width', 3);
+      .attr('stroke-width', 3)
+      .attr('opacity', showOLS ? 1 : 0);
+
+    // Show treatment effect brace only in 'effect' phase
+    const showEffect = phase === 'effect';
 
     // Get the y positions at x=0 for both lines (the intercepts)
     const insideY0 = insideLine.find(d => d.distance === 0)?.fitted ?? insideLine[insideLine.length - 1]?.fitted;
@@ -302,23 +311,22 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome }) => {
     if (insideY0 !== undefined && outsideY0 !== undefined) {
       const y1 = yScale(insideY0);
       const y2 = yScale(outsideY0);
-      const xPos = xScale(0) + 15; // Position brace to the right of boundary
-      const braceWidth = 12;
+      const xPos = xScale(0) + 5; // Position brace close to boundary
+      const braceWidth = 8;
 
-      // Create curly brace path
-      // A curly brace { shape connecting two y points
+      // Create curly brace path - a horizontal { rotated 90 degrees
       const createBracePath = (x: number, yTop: number, yBottom: number, width: number) => {
         const midY = (yTop + yBottom) / 2;
-        const height = yBottom - yTop;
-        const curveSize = Math.min(Math.abs(height) * 0.15, 8);
+        const height = Math.abs(yBottom - yTop);
+        const curveSize = Math.min(height * 0.12, 6);
 
         return `M ${x} ${yTop}
-                C ${x} ${yTop + curveSize}, ${x + width} ${yTop + curveSize}, ${x + width} ${yTop + curveSize * 2}
+                Q ${x + width} ${yTop}, ${x + width} ${yTop + curveSize * 2}
                 L ${x + width} ${midY - curveSize}
-                C ${x + width} ${midY}, ${x + width * 1.5} ${midY}, ${x + width * 1.5} ${midY}
-                C ${x + width * 1.5} ${midY}, ${x + width} ${midY}, ${x + width} ${midY + curveSize}
+                Q ${x + width} ${midY}, ${x + width * 1.8} ${midY}
+                Q ${x + width} ${midY}, ${x + width} ${midY + curveSize}
                 L ${x + width} ${yBottom - curveSize * 2}
-                C ${x + width} ${yBottom - curveSize}, ${x} ${yBottom - curveSize}, ${x} ${yBottom}`;
+                Q ${x + width} ${yBottom}, ${x} ${yBottom}`;
       };
 
       g.select('.treatment-brace')
@@ -327,7 +335,8 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome }) => {
         .attr('d', createBracePath(xPos, Math.min(y1, y2), Math.max(y1, y2), braceWidth))
         .attr('fill', 'none')
         .attr('stroke', '#2D3748')
-        .attr('stroke-width', 2);
+        .attr('stroke-width', 2)
+        .attr('opacity', showEffect ? 1 : 0);
 
       // Format treatment effect label
       const formatEffect = () => {
@@ -344,13 +353,14 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome }) => {
       g.select('.treatment-label')
         .transition()
         .duration(500)
-        .attr('x', xPos + braceWidth * 2 + 5)
+        .attr('x', xPos + braceWidth * 2 + 8)
         .attr('y', (y1 + y2) / 2)
         .attr('dy', '0.35em')
-        .attr('font-size', '12px')
+        .attr('font-size', '11px')
         .attr('font-weight', '600')
         .attr('fill', '#2D3748')
-        .text(formatEffect());
+        .attr('opacity', showEffect ? 1 : 0)
+        .text(showEffect ? formatEffect() : '');
     }
 
     // Update dots with transitions - separate animatable from non-animatable
@@ -401,7 +411,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome }) => {
       .attr('opacity', 0)
       .remove();
 
-  }, [outcome, data, insideLine, outsideLine, discontinuity, yDomain, innerWidth, innerHeight, margin]);
+  }, [outcome, phase, data, insideLine, outsideLine, discontinuity, yDomain, innerWidth, innerHeight, margin]);
 
   return (
     <div className="rdd-chart" style={{ position: 'relative' }}>

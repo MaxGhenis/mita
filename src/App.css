@@ -1,7 +1,7 @@
-/* Design system from maxghenis.com */
+/* Design system - using mita red as accent */
 :root {
-  --accent: #319795;
-  --accent-dark: #2C7A7B;
+  --accent: #c0392b;
+  --accent-dark: #a33025;
   --black: 15, 18, 25;
   --gray: 96, 115, 159;
   --gray-light: 229, 233, 240;

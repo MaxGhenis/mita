@@ -10,6 +10,7 @@ interface StepData {
   text: string;
   visual: 'intro' | 'map' | 'rdd-consumption' | 'rdd-stunting' | 'rdd-roads' | 'conclusion';
   showDistricts?: boolean;
+  rddPhase?: 'dots' | 'ols' | 'effect'; // Phase of RDD chart reveal
 }
 
 const steps: StepData[] = [
@@ -49,33 +50,45 @@ const steps: StepData[] = [
   },
   {
     id: 'rdd-intro',
-    title: 'Regression discontinuity design',
-    text: 'This is called regression discontinuity (RD). Harvard economist Melissa Dell measured outcomes against distance from the boundary. If there\'s a sharp "jump" right at the boundary—and not a gradual change across the region—that jump reveals the mita\'s causal effect.',
+    title: 'Plotting the data',
+    text: 'Each dot represents a district. The x-axis shows distance from the mita boundary: negative values are inside the mita region (red), positive values are outside (gray). The y-axis shows household consumption in 2001.',
     visual: 'rdd-consumption',
+    rddPhase: 'dots',
+  },
+  {
+    id: 'rdd-ols',
+    title: 'Finding the trend',
+    text: 'We fit separate regression lines on each side of the boundary. These lines show the average relationship between distance and consumption within each region.',
+    visual: 'rdd-consumption',
+    rddPhase: 'ols',
   },
   {
     id: 'consumption',
-    title: 'Finding #1: Lower consumption',
-    text: 'Households in former mita districts consume approximately 25% less than those in non-mita districts. The gap at the boundary (distance = 0) reveals the causal effect.',
+    title: 'The discontinuity',
+    text: 'The key insight: there\'s a sharp jump at the boundary (distance = 0). This gap—approximately 25% lower consumption in mita districts—is the causal effect. Districts just inside vs. just outside were nearly identical before 1573, so the gap must be due to the mita.',
     visual: 'rdd-consumption',
+    rddPhase: 'effect',
   },
   {
     id: 'stunting',
     title: 'Finding #2: Higher child stunting',
-    text: 'Children in mita districts face significantly higher stunting rates (low height-for-age), reflecting persistent poverty and malnutrition. Colonial exploitation continues to harm children generations later.',
+    text: 'The same pattern appears for child stunting. Children in mita districts face significantly higher stunting rates, reflecting persistent poverty and malnutrition. Colonial exploitation continues to harm children generations later.',
     visual: 'rdd-stunting',
+    rddPhase: 'effect',
   },
   {
     id: 'roads',
     title: 'Finding #3: Less infrastructure',
-    text: 'Mita districts have substantially fewer roads today. Dell traces this to the mita\'s effect on land tenure: without the labor draft, large haciendas formed and invested in roads to attract workers and transport goods.',
+    text: 'Mita districts also have substantially fewer roads today. Dell traces this to the mita\'s effect on land tenure: without the labor draft, large haciendas formed and invested in roads to attract workers and transport goods.',
     visual: 'rdd-roads',
+    rddPhase: 'effect',
   },
   {
     id: 'mechanism',
     title: 'Why do effects persist?',
     text: 'The mita blocked hacienda formation, reducing long-term investments in land, infrastructure, and human capital. These institutional differences compounded over centuries, producing the disparities we observe today.',
     visual: 'rdd-roads',
+    rddPhase: 'effect',
   },
   {
     id: 'conclusion',
@@ -154,16 +167,19 @@ const ScrollyStory: React.FC = () => {
       <section className="scrolly-section">
         <div className="sticky-graphic">
           <div className="graphic-container">
-            <RDDChart outcome={
-              currentStep >= 8 ? 'roads' :
-              currentStep >= 7 ? 'stunting' :
-              'consumption'
-            } />
+            <RDDChart
+              outcome={
+                currentStep >= 9 ? 'roads' :
+                currentStep >= 8 ? 'stunting' :
+                'consumption'
+              }
+              phase={steps[currentStep]?.rddPhase ?? 'effect'}
+            />
           </div>
         </div>
         <div className="scrolly-text">
           <Scrollama onStepEnter={onStepEnter} offset={0.5}>
-            {steps.slice(5, 10).map((step, idx) => (
+            {steps.slice(5, 11).map((step, idx) => (
               <Step key={step.id} data={step}>
                 <div className={`narrative-step ${currentStep === idx + 5 ? 'active' : ''}`}>
                   <h2>{step.title}</h2>
