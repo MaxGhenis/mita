@@ -90,7 +90,7 @@
 }
 
 .narrative-step.active > * {
-  box-shadow: 0 4px 25px rgba(192, 57, 43, 0.25);
+  box-shadow: 0 2px 15px rgba(192, 57, 43, 0.08);
   border-left: 4px solid var(--accent);
 }
 
