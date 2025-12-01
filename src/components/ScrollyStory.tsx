@@ -17,7 +17,7 @@ const steps: StepData[] = [
   {
     id: 'intro',
     title: 'The mining mita',
-    text: 'In 1573, the Spanish colonial government established the mita—a forced labor system that shaped Peru\'s economic geography for centuries.',
+    text: 'In 1573, the Spanish colonial government established the mita—a forced labor system that shaped Peru\'s economic geography for centuries. Melissa Dell\'s landmark 2010 study shows how it still affects household consumption, child health, and infrastructure today.',
     visual: 'intro',
   },
   {
@@ -51,7 +51,7 @@ const steps: StepData[] = [
   {
     id: 'rdd-intro',
     title: 'Plotting the data',
-    text: 'Each dot represents a district. The x-axis shows distance from the mita boundary: negative values are inside the mita region (red), positive values are outside (gray). The y-axis shows household consumption in 2001.',
+    text: 'Each dot represents a district. The x-axis shows distance from the mita boundary, with mita districts on the right (red) and non-mita districts on the left (gray). The y-axis shows household consumption in 2001.',
     visual: 'rdd-consumption',
     rddPhase: 'dots',
   },

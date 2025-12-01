@@ -36,6 +36,8 @@ const getAnimatableUbigeos = () => {
 const animatableUbigeos = getAnimatableUbigeos();
 
 // Process data for a specific outcome - includes ALL districts with that outcome
+// Note: We flip the sign so mita (inside) is positive, non-mita (outside) is negative
+// This matches Dell's convention and puts treatment on the right side
 const processData = (outcome: 'consumption' | 'stunting' | 'roads') => {
   return (mitaData as DistrictData[])
     .filter((d) => {
@@ -45,10 +47,12 @@ const processData = (outcome: 'consumption' | 'stunting' | 'roads') => {
     .map((d) => {
       const rawValue = d[outcome] as number;
       const value = outcome === 'stunting' ? rawValue * 100 : rawValue;
+      // Flip sign: mita (isInside=true) should be positive, non-mita negative
+      const flippedDistance = d.isInside ? Math.abs(d.distance as number) : -Math.abs(d.distance as number);
       return {
-        x: d.distance as number,
+        x: flippedDistance,
         y: value,
-        distance: d.distance as number,
+        distance: flippedDistance,
         value: value,
         isInside: d.isInside,
         ubigeo: d.ubigeo,
@@ -65,24 +69,30 @@ const PAPER_COEFFICIENTS = {
   roads: -0.31,        // km road density
 };
 
-// Calculate fitted lines that show the paper's discontinuity at the boundary
-// We fit quadratic polynomials to each side, then adjust intercepts to match paper's estimates
+// Calculate fitted lines - both linear OLS and polynomial versions
 const calculateFittedLines = (outcome: 'consumption' | 'stunting' | 'roads') => {
   const data = processData(outcome);
   const insideData = data.filter((d) => d.isInside);
   const outsideData = data.filter((d) => !d.isInside);
 
+  // Simple linear OLS: y = a + b*x
+  const calcLinearOLS = (points: { distance: number; value: number }[]) => {
+    const n = points.length;
+    const sumX = points.reduce((s, p) => s + p.distance, 0);
+    const sumY = points.reduce((s, p) => s + p.value, 0);
+    const sumXY = points.reduce((s, p) => s + p.distance * p.value, 0);
+    const sumX2 = points.reduce((s, p) => s + p.distance * p.distance, 0);
+    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+    const intercept = (sumY - slope * sumX) / n;
+    return { intercept, slope };
+  };
+
   // Quadratic polynomial regression: y = a + b*x + c*x^2
   const calcQuadraticOLS = (points: { distance: number; value: number }[]) => {
     const n = points.length;
     if (n < 3) {
-      const sumX = points.reduce((s, p) => s + p.distance, 0);
-      const sumY = points.reduce((s, p) => s + p.value, 0);
-      const sumXY = points.reduce((s, p) => s + p.distance * p.value, 0);
-      const sumX2 = points.reduce((s, p) => s + p.distance * p.distance, 0);
-      const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-      const intercept = (sumY - slope * sumX) / n;
-      return { intercept, slope, quadratic: 0 };
+      const linear = calcLinearOLS(points);
+      return { ...linear, quadratic: 0 };
     }
 
     const sumX = points.reduce((s, p) => s + p.distance, 0);
@@ -96,9 +106,8 @@ const calculateFittedLines = (outcome: 'consumption' | 'stunting' | 'roads') => 
     const det = n * (sumX2 * sumX4 - sumX3 * sumX3) - sumX * (sumX * sumX4 - sumX3 * sumX2) + sumX2 * (sumX * sumX3 - sumX2 * sumX2);
 
     if (Math.abs(det) < 1e-10) {
-      const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-      const intercept = (sumY - slope * sumX) / n;
-      return { intercept, slope, quadratic: 0 };
+      const linear = calcLinearOLS(points);
+      return { ...linear, quadratic: 0 };
     }
 
     const intercept = (sumY * (sumX2 * sumX4 - sumX3 * sumX3) - sumX * (sumXY * sumX4 - sumX2Y * sumX3) + sumX2 * (sumXY * sumX3 - sumX2Y * sumX2)) / det;
@@ -108,8 +117,11 @@ const calculateFittedLines = (outcome: 'consumption' | 'stunting' | 'roads') => 
     return { intercept, slope, quadratic };
   };
 
-  const insideOLS = calcQuadraticOLS(insideData);
-  const outsideOLS = calcQuadraticOLS(outsideData);
+  // Calculate both linear and polynomial fits
+  const insideLinear = calcLinearOLS(insideData);
+  const outsideLinear = calcLinearOLS(outsideData);
+  const insidePoly = calcQuadraticOLS(insideData);
+  const outsidePoly = calcQuadraticOLS(outsideData);
 
   const minInside = Math.min(...insideData.map((d) => d.distance));
   const maxOutside = Math.max(...outsideData.map((d) => d.distance));
@@ -119,37 +131,49 @@ const calculateFittedLines = (outcome: 'consumption' | 'stunting' | 'roads') => 
     ? PAPER_COEFFICIENTS[outcome] * 100  // Convert to percentage points
     : PAPER_COEFFICIENTS[outcome];
 
-  // Calculate what the naive OLS discontinuity would be
-  const naiveDiscontinuity = insideOLS.intercept - outsideOLS.intercept;
+  // Calculate what the naive OLS discontinuity would be (from linear fit)
+  const naiveDiscontinuity = insideLinear.intercept - outsideLinear.intercept;
 
-  // For the visual lines, we want them to show the PAPER's discontinuity
-  // We keep the slopes/curvature from our fit but adjust intercepts
-  // Center the lines around the data mean, then apply the paper's gap
+  // For the paper's estimate, we adjust intercepts to show the paper's discontinuity
   const allMean = data.reduce((s, d) => s + d.value, 0) / data.length;
+  const paperOutsideIntercept = allMean;
+  const paperInsideIntercept = allMean + paperDiscontinuity;
 
-  // Adjusted intercepts to show paper's discontinuity
-  // outside line at x=0 equals allMean, inside line at x=0 equals allMean + paperDiscontinuity
-  const outsideIntercept = allMean;
-  const insideIntercept = allMean + paperDiscontinuity;
+  // Generate LINEAR line points (for 'ols' and 'naive-effect' phases)
+  const insideLineLinear = [
+    { distance: Math.floor(minInside), fitted: insideLinear.intercept + insideLinear.slope * Math.floor(minInside) },
+    { distance: 0, fitted: insideLinear.intercept }
+  ];
+  const outsideLineLinear = [
+    { distance: 0, fitted: outsideLinear.intercept },
+    { distance: Math.ceil(maxOutside), fitted: outsideLinear.intercept + outsideLinear.slope * Math.ceil(maxOutside) }
+  ];
 
-  // Generate polynomial curve points with adjusted intercepts
-  const insideLine = [];
+  // Generate POLYNOMIAL curve points (for 'effect' phase with paper's adjusted intercepts)
+  const insideLinePoly = [];
   for (let d = Math.floor(minInside); d <= 0; d += 1) {
-    insideLine.push({
+    insideLinePoly.push({
       distance: d,
-      fitted: insideIntercept + insideOLS.slope * d + insideOLS.quadratic * d * d
+      fitted: paperInsideIntercept + insidePoly.slope * d + insidePoly.quadratic * d * d
     });
   }
 
-  const outsideLine = [];
+  const outsideLinePoly = [];
   for (let d = 0; d <= Math.ceil(maxOutside); d += 1) {
-    outsideLine.push({
+    outsideLinePoly.push({
       distance: d,
-      fitted: outsideIntercept + outsideOLS.slope * d + outsideOLS.quadratic * d * d
+      fitted: paperOutsideIntercept + outsidePoly.slope * d + outsidePoly.quadratic * d * d
     });
   }
 
-  return { insideLine, outsideLine, naiveDiscontinuity, paperDiscontinuity };
+  return {
+    insideLineLinear,
+    outsideLineLinear,
+    insideLinePoly,
+    outsideLinePoly,
+    naiveDiscontinuity,
+    paperDiscontinuity
+  };
 };
 
 const outcomeLabels = {
@@ -163,13 +187,24 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
   const [tooltip, setTooltip] = useState<{ x: number; y: number; data: any } | null>(null);
 
   const data = useMemo(() => processData(outcome), [outcome]);
-  const { insideLine, outsideLine, naiveDiscontinuity, paperDiscontinuity } = useMemo(
+  const {
+    insideLineLinear,
+    outsideLineLinear,
+    insideLinePoly,
+    outsideLinePoly,
+    paperDiscontinuity
+  } = useMemo(
     () => calculateFittedLines(outcome),
     [outcome]
   );
 
-  // Use naive estimate for 'naive-effect' phase, paper's for 'effect' phase
-  const discontinuity = phase === 'naive-effect' ? naiveDiscontinuity : paperDiscontinuity;
+  // Always use paper's discontinuity
+  const discontinuity = paperDiscontinuity;
+
+  // Use linear lines for early phases, polynomial for paper's effect phase
+  const usePolynomial = phase === 'effect';
+  const insideLine = usePolynomial ? insideLinePoly : insideLineLinear;
+  const outsideLine = usePolynomial ? outsideLinePoly : outsideLineLinear;
 
   const insideData = data.filter((d) => d.isInside);
   const outsideData = data.filter((d) => !d.isInside);
@@ -218,23 +253,23 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('class', 'chart-content')
         .attr('transform', `translate(${margin.left},${margin.top})`);
 
-      // Background regions
+      // Background regions - mita on RIGHT, non-mita on LEFT
       g.append('rect')
-        .attr('class', 'mita-region')
+        .attr('class', 'nonmita-region')
         .attr('x', xScale(-50))
         .attr('width', xScale(0) - xScale(-50))
         .attr('y', 0)
         .attr('height', innerHeight)
-        .attr('fill', colors.mita)
+        .attr('fill', colors.nonmita)
         .attr('opacity', 0.08);
 
       g.append('rect')
-        .attr('class', 'nonmita-region')
+        .attr('class', 'mita-region')
         .attr('x', xScale(0))
         .attr('width', xScale(50) - xScale(0))
         .attr('y', 0)
         .attr('height', innerHeight)
-        .attr('fill', colors.nonmita)
+        .attr('fill', colors.mita)
         .attr('opacity', 0.08);
 
       // Region labels
@@ -242,19 +277,19 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('x', xScale(-25))
         .attr('y', 20)
         .attr('text-anchor', 'middle')
-        .attr('fill', colors.mitaDark)
+        .attr('fill', colors.nonmita)
         .attr('font-size', '13px')
         .attr('font-weight', '600')
-        .text('Mita');
+        .text('Non-mita');
 
       g.append('text')
         .attr('x', xScale(25))
         .attr('y', 20)
         .attr('text-anchor', 'middle')
-        .attr('fill', colors.nonmita)
+        .attr('fill', colors.mitaDark)
         .attr('font-size', '13px')
         .attr('font-weight', '600')
-        .text('Non-mita');
+        .text('Mita');
 
       // Grid lines
       g.append('g')
@@ -324,8 +359,9 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
       .duration(500)
       .call(yAxis);
 
+    // X-axis shows absolute distance (positive both directions)
     g.select<SVGGElement>('.x-axis')
-      .call(d3.axisBottom(xScale).ticks(5));
+      .call(d3.axisBottom(xScale).ticks(5).tickFormat(d => String(Math.abs(d as number))));
 
     // Update grid
     g.select<SVGGElement>('.grid-y')
@@ -373,23 +409,23 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
     if (insideY0 !== undefined && outsideY0 !== undefined) {
       const y1 = yScale(insideY0);
       const y2 = yScale(outsideY0);
-      const xPos = xScale(0) - 5; // Position brace on LEFT side of boundary (mita side)
+      const xPos = xScale(0) + 5; // Position brace on RIGHT side of boundary (mita side)
       const braceWidth = 8;
 
-      // Create curly brace path - opens to the LEFT (toward mita region)
+      // Create curly brace path - opens to the RIGHT (toward mita region)
       const createBracePath = (x: number, yTop: number, yBottom: number, width: number) => {
         const midY = (yTop + yBottom) / 2;
         const height = Math.abs(yBottom - yTop);
         const curveSize = Math.min(height * 0.12, 6);
 
-        // Mirror the brace to open leftward
+        // Brace opens rightward
         return `M ${x} ${yTop}
-                Q ${x - width} ${yTop}, ${x - width} ${yTop + curveSize * 2}
-                L ${x - width} ${midY - curveSize}
-                Q ${x - width} ${midY}, ${x - width * 1.8} ${midY}
-                Q ${x - width} ${midY}, ${x - width} ${midY + curveSize}
-                L ${x - width} ${yBottom - curveSize * 2}
-                Q ${x - width} ${yBottom}, ${x} ${yBottom}`;
+                Q ${x + width} ${yTop}, ${x + width} ${yTop + curveSize * 2}
+                L ${x + width} ${midY - curveSize}
+                Q ${x + width} ${midY}, ${x + width * 1.8} ${midY}
+                Q ${x + width} ${midY}, ${x + width} ${midY + curveSize}
+                L ${x + width} ${yBottom - curveSize * 2}
+                Q ${x + width} ${yBottom}, ${x} ${yBottom}`;
       };
 
       g.select('.treatment-brace')
@@ -417,8 +453,8 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
       const labelPadding = { x: 6, y: 4 };
       const labelWidth = labelText.length * 7 + labelPadding.x * 2;
       const labelHeight = 18;
-      // Position label to the LEFT of the brace
-      const labelX = xPos - braceWidth * 2 - labelWidth + labelPadding.x;
+      // Position label to the RIGHT of the brace
+      const labelX = xPos + braceWidth * 2;
       const labelY = (y1 + y2) / 2;
 
       // Background box for label
