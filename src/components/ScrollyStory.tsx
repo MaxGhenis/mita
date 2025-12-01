@@ -51,36 +51,36 @@ const steps: StepData[] = [
   {
     id: 'rdd-intro',
     title: 'Plotting the data',
-    text: 'Each dot represents a district. The x-axis shows distance from the mita boundary, with mita districts on the right (red) and non-mita districts on the left (gray). The y-axis shows household consumption in 2001.',
-    visual: 'rdd-consumption',
+    text: 'Each dot represents a district. The x-axis shows distance from the mita boundary, with mita districts on the right (red) and non-mita districts on the left (gray). The y-axis shows child stunting rates.',
+    visual: 'rdd-stunting',
     rddPhase: 'dots',
   },
   {
     id: 'rdd-ols',
     title: 'Finding the trend',
-    text: 'We fit separate regression lines on each side of the boundary. These lines show the average relationship between distance and consumption within each region.',
-    visual: 'rdd-consumption',
+    text: 'We fit separate regression lines on each side of the boundary. These lines show the average relationship between distance and stunting within each region.',
+    visual: 'rdd-stunting',
     rddPhase: 'ols',
   },
   {
     id: 'naive-effect',
     title: 'A first estimate',
     text: 'Our simple regression shows a gap at the boundary. But this naive estimate doesn\'t account for geography, elevation, or other factors that might also vary at the boundary.',
-    visual: 'rdd-consumption',
+    visual: 'rdd-stunting',
     rddPhase: 'naive-effect',
   },
   {
-    id: 'consumption',
+    id: 'stunting',
     title: 'The controlled estimate',
-    text: 'Dell\'s paper uses polynomial RD with controls for elevation, slope, and other geographic factors. The refined estimate: 22% lower consumption in mita districts. The robust result confirms this isn\'t driven by geography.',
-    visual: 'rdd-consumption',
+    text: 'Dell\'s paper uses polynomial RD with controls for elevation, slope, and other geographic factors. The refined estimate: 6 percentage points higher stunting in mita districts. Colonial exploitation continues to harm children generations later.',
+    visual: 'rdd-stunting',
     rddPhase: 'effect',
   },
   {
-    id: 'stunting',
-    title: 'Finding #2: Higher child stunting',
-    text: 'The same pattern appears for child stunting. Children in mita districts face significantly higher stunting rates, reflecting persistent poverty and malnutrition. Colonial exploitation continues to harm children generations later.',
-    visual: 'rdd-stunting',
+    id: 'consumption',
+    title: 'Finding #2: Lower consumption',
+    text: 'The same pattern appears for household consumption. Mita districts have about 25% lower consumption today—a coefficient of -0.25 log points. The persistent poverty reflects centuries of institutional disadvantage.',
+    visual: 'rdd-consumption',
     rddPhase: 'effect',
   },
   {
@@ -205,8 +205,8 @@ const ScrollyStory: React.FC = () => {
             <div className="conclusion-content">
               <h2>Key takeaways</h2>
               <ul>
+                <li><strong>+6pp higher</strong> child stunting</li>
                 <li><strong>~25% lower</strong> household consumption</li>
-                <li><strong>Higher</strong> child stunting rates</li>
                 <li><strong>Fewer</strong> roads</li>
               </ul>
               <p className="conclusion-note">
