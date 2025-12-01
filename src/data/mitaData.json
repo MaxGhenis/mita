@@ -1,0 +1,1852 @@
+[
+  {
+    "ubigeo": 30101,
+    "distance": 6.09,
+    "isInside": false,
+    "consumption": 6.8454,
+    "stunting": 0.1791,
+    "roads": 0.06,
+    "lat": 13.6339,
+    "lon": 72.8814
+  },
+  {
+    "ubigeo": 30102,
+    "distance": -29.73,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.281,
+    "roads": 0.0,
+    "lat": 13.9478,
+    "lon": 72.9914
+  },
+  {
+    "ubigeo": 30103,
+    "distance": -17.98,
+    "isInside": true,
+    "consumption": 5.5583,
+    "stunting": 0.3562,
+    "roads": 41.08,
+    "lat": 13.8742,
+    "lon": 72.8728
+  },
+  {
+    "ubigeo": 30104,
+    "distance": 17.04,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3757,
+    "roads": 0.0,
+    "lat": 13.55,
+    "lon": 72.7
+  },
+  {
+    "ubigeo": 30105,
+    "distance": 11.45,
+    "isInside": false,
+    "consumption": 5.7551,
+    "stunting": 0.4622,
+    "roads": 0.0,
+    "lat": 13.5,
+    "lon": 72.9333
+  },
+  {
+    "ubigeo": 30106,
+    "distance": -12.94,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5967,
+    "roads": 80.17,
+    "lat": 13.8667,
+    "lon": 72.7667
+  },
+  {
+    "ubigeo": 30107,
+    "distance": -25.55,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2428,
+    "roads": 0.0,
+    "lat": 13.8625,
+    "lon": 73.0728
+  },
+  {
+    "ubigeo": 30108,
+    "distance": 20.85,
+    "isInside": false,
+    "consumption": 6.2869,
+    "stunting": 0.4651,
+    "roads": 0.0,
+    "lat": 13.5133,
+    "lon": 72.81
+  },
+  {
+    "ubigeo": 30109,
+    "distance": 8.27,
+    "isInside": false,
+    "consumption": 6.4012,
+    "stunting": 0.2691,
+    "roads": 0.0,
+    "lat": 13.6167,
+    "lon": 72.8714
+  },
+  {
+    "ubigeo": 30201,
+    "distance": -25.69,
+    "isInside": true,
+    "consumption": 6.7255,
+    "stunting": 0.334,
+    "roads": 132.83,
+    "lat": 13.6606,
+    "lon": 73.3867
+  },
+  {
+    "ubigeo": 30202,
+    "distance": -13.6,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4366,
+    "roads": 0.0,
+    "lat": 13.5278,
+    "lon": 73.3633
+  },
+  {
+    "ubigeo": 30204,
+    "distance": -10.33,
+    "isInside": true,
+    "consumption": 6.1569,
+    "stunting": 0.4173,
+    "roads": 0.0,
+    "lat": 13.645,
+    "lon": 73.0875
+  },
+  {
+    "ubigeo": 30205,
+    "distance": -44.39,
+    "isInside": true,
+    "consumption": 5.4241,
+    "stunting": 0.4391,
+    "roads": 0.0,
+    "lat": 13.7603,
+    "lon": 73.5333
+  },
+  {
+    "ubigeo": 30207,
+    "distance": -15.28,
+    "isInside": true,
+    "consumption": 6.0564,
+    "stunting": 0.5061,
+    "roads": 0.0,
+    "lat": 13.7,
+    "lon": 73.1
+  },
+  {
+    "ubigeo": 30208,
+    "distance": -7.75,
+    "isInside": true,
+    "consumption": 5.7662,
+    "stunting": 0.3697,
+    "roads": 0.0,
+    "lat": 13.6164,
+    "lon": 73.0878
+  },
+  {
+    "ubigeo": 30209,
+    "distance": -18.27,
+    "isInside": true,
+    "consumption": 6.1848,
+    "stunting": 0.4287,
+    "roads": 0.0,
+    "lat": 13.6081,
+    "lon": 73.3439
+  },
+  {
+    "ubigeo": 30213,
+    "distance": -23.42,
+    "isInside": true,
+    "consumption": 6.1974,
+    "stunting": 0.4565,
+    "roads": 19.28,
+    "lat": 13.6506,
+    "lon": 73.365
+  },
+  {
+    "ubigeo": 30215,
+    "distance": -33.27,
+    "isInside": true,
+    "consumption": 6.0681,
+    "stunting": 0.3757,
+    "roads": 0.0,
+    "lat": 13.6558,
+    "lon": 73.4931
+  },
+  {
+    "ubigeo": 30216,
+    "distance": -28.02,
+    "isInside": true,
+    "consumption": 6.5222,
+    "stunting": 0.3093,
+    "roads": 0.0,
+    "lat": 13.6531,
+    "lon": 73.4289
+  },
+  {
+    "ubigeo": 30218,
+    "distance": -42.48,
+    "isInside": true,
+    "consumption": 6.0603,
+    "stunting": 0.5951,
+    "roads": 0.0,
+    "lat": 13.7875,
+    "lon": 73.4722
+  },
+  {
+    "ubigeo": 30219,
+    "distance": -7.22,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3094,
+    "roads": 0.0,
+    "lat": 13.53,
+    "lon": 73.28
+  },
+  {
+    "ubigeo": 30301,
+    "distance": -33.39,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5215,
+    "roads": 8.06,
+    "lat": 14.3606,
+    "lon": 72.8756
+  },
+  {
+    "ubigeo": 30303,
+    "distance": -36.94,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5985,
+    "roads": 3.36,
+    "lat": 14.3314,
+    "lon": 72.8903
+  },
+  {
+    "ubigeo": 30304,
+    "distance": -28.56,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3716,
+    "roads": 38.78,
+    "lat": 14.4214,
+    "lon": 72.9119
+  },
+  {
+    "ubigeo": 30305,
+    "distance": -45.3,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.416,
+    "roads": 0.0,
+    "lat": 14.2561,
+    "lon": 72.555
+  },
+  {
+    "ubigeo": 30307,
+    "distance": -41.41,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5364,
+    "roads": 48.83,
+    "lat": 14.3089,
+    "lon": 72.9467
+  },
+  {
+    "ubigeo": 30403,
+    "distance": -48.99,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5,
+    "roads": 134.18,
+    "lat": 14.3772,
+    "lon": 73.1614
+  },
+  {
+    "ubigeo": 30404,
+    "distance": -35.25,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4,
+    "roads": 0.0,
+    "lat": 13.9736,
+    "lon": 73.0628
+  },
+  {
+    "ubigeo": 30406,
+    "distance": -48.09,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.553,
+    "roads": 0.0,
+    "lat": 14.4158,
+    "lon": 73.2078
+  },
+  {
+    "ubigeo": 30409,
+    "distance": -44.32,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.6637,
+    "roads": 0.0,
+    "lat": 13.9506,
+    "lon": 73.2278
+  },
+  {
+    "ubigeo": 30411,
+    "distance": -38.7,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.378,
+    "roads": 0.0,
+    "lat": 13.9242,
+    "lon": 73.1822
+  },
+  {
+    "ubigeo": 30415,
+    "distance": -41.65,
+    "isInside": true,
+    "consumption": 5.8587,
+    "stunting": 0.3412,
+    "roads": 0.0,
+    "lat": 13.9589,
+    "lon": 73.1855
+  },
+  {
+    "ubigeo": 30501,
+    "distance": -10.82,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5401,
+    "roads": 81.54,
+    "lat": 13.9514,
+    "lon": 72.1672
+  },
+  {
+    "ubigeo": 30502,
+    "distance": -6.45,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5335,
+    "roads": 159.23,
+    "lat": 13.7514,
+    "lon": 72.3528
+  },
+  {
+    "ubigeo": 30503,
+    "distance": -5.91,
+    "isInside": true,
+    "consumption": 6.2046,
+    "stunting": 0.5458,
+    "roads": 0.0,
+    "lat": 13.8367,
+    "lon": 72.4314
+  },
+  {
+    "ubigeo": 30504,
+    "distance": -30.17,
+    "isInside": true,
+    "consumption": 5.6047,
+    "stunting": 0.5579,
+    "roads": 32.97,
+    "lat": 14.2128,
+    "lon": 72.19
+  },
+  {
+    "ubigeo": 30505,
+    "distance": -17.51,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.571,
+    "roads": 0.0,
+    "lat": 14.0853,
+    "lon": 72.1081
+  },
+  {
+    "ubigeo": 30506,
+    "distance": -29.09,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.6306,
+    "roads": 75.65,
+    "lat": 14.1167,
+    "lon": 72.25
+  },
+  {
+    "ubigeo": 30601,
+    "distance": -49.86,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4167,
+    "roads": 0.0,
+    "lat": 13.5133,
+    "lon": 73.7131
+  },
+  {
+    "ubigeo": 30602,
+    "distance": -46.29,
+    "isInside": true,
+    "consumption": 6.7269,
+    "stunting": 0.4407,
+    "roads": 0.0,
+    "lat": 13.5325,
+    "lon": 73.6772
+  },
+  {
+    "ubigeo": 30604,
+    "distance": -47.9,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.42,
+    "roads": 0.0,
+    "lat": 13.3875,
+    "lon": 73.6903
+  },
+  {
+    "ubigeo": 30605,
+    "distance": -33.16,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3375,
+    "roads": 0.0,
+    "lat": 13.4831,
+    "lon": 73.5608
+  },
+  {
+    "ubigeo": 30606,
+    "distance": -45.41,
+    "isInside": true,
+    "consumption": 6.0811,
+    "stunting": 0.3874,
+    "roads": 0.0,
+    "lat": 13.4036,
+    "lon": 73.6697
+  },
+  {
+    "ubigeo": 30607,
+    "distance": -49.32,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3483,
+    "roads": 0.0,
+    "lat": 13.67,
+    "lon": 73.66
+  },
+  {
+    "ubigeo": 30608,
+    "distance": -38.09,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4494,
+    "roads": 0.0,
+    "lat": 13.5333,
+    "lon": 73.6
+  },
+  {
+    "ubigeo": 30701,
+    "distance": -36.15,
+    "isInside": true,
+    "consumption": 5.8004,
+    "stunting": 0.3111,
+    "roads": 57.39,
+    "lat": 14.1019,
+    "lon": 72.7067
+  },
+  {
+    "ubigeo": 30702,
+    "distance": -31.69,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5083,
+    "roads": 0.0,
+    "lat": 14.0622,
+    "lon": 72.6697
+  },
+  {
+    "ubigeo": 30703,
+    "distance": -9.8,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4307,
+    "roads": 0.0,
+    "lat": 13.87,
+    "lon": 72.5039
+  },
+  {
+    "ubigeo": 30704,
+    "distance": -32.81,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5639,
+    "roads": 0.0,
+    "lat": 14.0833,
+    "lon": 72.5167
+  },
+  {
+    "ubigeo": 30705,
+    "distance": -48.32,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5057,
+    "roads": 0.0,
+    "lat": 14.2294,
+    "lon": 72.5861
+  },
+  {
+    "ubigeo": 30706,
+    "distance": -37.05,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2763,
+    "roads": 0.0,
+    "lat": 14.1047,
+    "lon": 72.6125
+  },
+  {
+    "ubigeo": 30707,
+    "distance": -44.16,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5739,
+    "roads": 0.0,
+    "lat": 14.175,
+    "lon": 72.6739
+  },
+  {
+    "ubigeo": 30708,
+    "distance": -31.08,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5275,
+    "roads": 108.04,
+    "lat": 14.0725,
+    "lon": 72.4728
+  },
+  {
+    "ubigeo": 30709,
+    "distance": -43.47,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5135,
+    "roads": 0.0,
+    "lat": 14.1647,
+    "lon": 72.6211
+  },
+  {
+    "ubigeo": 30710,
+    "distance": -41.42,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4494,
+    "roads": 0.0,
+    "lat": 14.15,
+    "lon": 72.6667
+  },
+  {
+    "ubigeo": 30711,
+    "distance": -48.31,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2895,
+    "roads": 0.0,
+    "lat": 14.2192,
+    "lon": 72.6239
+  },
+  {
+    "ubigeo": 30712,
+    "distance": -33.64,
+    "isInside": true,
+    "consumption": 5.8644,
+    "stunting": 0.1688,
+    "roads": 0.0,
+    "lat": 14.0756,
+    "lon": 72.6258
+  },
+  {
+    "ubigeo": 30713,
+    "distance": -43.93,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5124,
+    "roads": 0.0,
+    "lat": 14.2497,
+    "lon": 72.6797
+  },
+  {
+    "ubigeo": 30714,
+    "distance": -27.37,
+    "isInside": true,
+    "consumption": 5.4679,
+    "stunting": 0.5926,
+    "roads": 0.0,
+    "lat": 14.0167,
+    "lon": 72.5667
+  },
+  {
+    "ubigeo": 40306,
+    "distance": 13.5,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3731,
+    "roads": 16.48,
+    "lat": 15.5061,
+    "lon": 73.4792
+  },
+  {
+    "ubigeo": 40405,
+    "distance": 49.61,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4304,
+    "roads": 0.0,
+    "lat": 15.28,
+    "lon": 72.37
+  },
+  {
+    "ubigeo": 40409,
+    "distance": 47.82,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.2082,
+    "roads": 0.0,
+    "lat": 15.2661,
+    "lon": 72.3417
+  },
+  {
+    "ubigeo": 40504,
+    "distance": 30.59,
+    "isInside": false,
+    "consumption": 6.4181,
+    "stunting": 0.2436,
+    "roads": 18.49,
+    "lat": 15.5083,
+    "lon": 71.4456
+  },
+  {
+    "ubigeo": 40505,
+    "distance": 11.45,
+    "isInside": false,
+    "consumption": 6.0039,
+    "stunting": 0.3784,
+    "roads": 17.49,
+    "lat": 15.1881,
+    "lon": 71.7725
+  },
+  {
+    "ubigeo": 40514,
+    "distance": 23.15,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.1607,
+    "roads": 46.34,
+    "lat": 15.9319,
+    "lon": 71.1047
+  },
+  {
+    "ubigeo": 40515,
+    "distance": 31.3,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3385,
+    "roads": 122.7,
+    "lat": 15.4869,
+    "lon": 71.4583
+  },
+  {
+    "ubigeo": 40517,
+    "distance": 28.23,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3835,
+    "roads": 0.0,
+    "lat": 15.3461,
+    "lon": 71.4478
+  },
+  {
+    "ubigeo": 40518,
+    "distance": 42.21,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3061,
+    "roads": 0.0,
+    "lat": 15.5331,
+    "lon": 71.5508
+  },
+  {
+    "ubigeo": 40603,
+    "distance": 0.24,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4163,
+    "roads": 0.0,
+    "lat": 14.6722,
+    "lon": 72.0219
+  },
+  {
+    "ubigeo": 40604,
+    "distance": 38.1,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.2,
+    "roads": 0.0,
+    "lat": 15.5475,
+    "lon": 72.9186
+  },
+  {
+    "ubigeo": 40607,
+    "distance": 42.36,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3704,
+    "roads": 33.1,
+    "lat": 15.5025,
+    "lon": 72.8297
+  },
+  {
+    "ubigeo": 40801,
+    "distance": 17.06,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.1974,
+    "roads": 239.63,
+    "lat": 15.2131,
+    "lon": 72.8886
+  },
+  {
+    "ubigeo": 40802,
+    "distance": 26.91,
+    "isInside": false,
+    "consumption": 6.3896,
+    "stunting": 0.5691,
+    "roads": 0.0,
+    "lat": 15.1347,
+    "lon": 72.7647
+  },
+  {
+    "ubigeo": 40803,
+    "distance": 5.33,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.2157,
+    "roads": 0.0,
+    "lat": 15.2406,
+    "lon": 73.0711
+  },
+  {
+    "ubigeo": 40804,
+    "distance": 21.96,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.448,
+    "roads": 0.0,
+    "lat": 15.1269,
+    "lon": 72.8105
+  },
+  {
+    "ubigeo": 40805,
+    "distance": 12.35,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4854,
+    "roads": 0.0,
+    "lat": 15.1306,
+    "lon": 72.9047
+  },
+  {
+    "ubigeo": 40806,
+    "distance": 32.54,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.6863,
+    "roads": 0.0,
+    "lat": 15.06,
+    "lon": 72.6908
+  },
+  {
+    "ubigeo": 40807,
+    "distance": 11.0,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4167,
+    "roads": 0.0,
+    "lat": 15.3236,
+    "lon": 73.0594
+  },
+  {
+    "ubigeo": 40808,
+    "distance": 2.48,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.451,
+    "roads": 0.0,
+    "lat": 15.32,
+    "lon": 73.22
+  },
+  {
+    "ubigeo": 40809,
+    "distance": 6.05,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.7407,
+    "roads": 0.0,
+    "lat": 15.3561,
+    "lon": 73.2325
+  },
+  {
+    "ubigeo": 40810,
+    "distance": 20.98,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3827,
+    "roads": 0.0,
+    "lat": 15.1731,
+    "lon": 72.8308
+  },
+  {
+    "ubigeo": 40811,
+    "distance": 18.01,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3474,
+    "roads": 0.0,
+    "lat": 15.2642,
+    "lon": 72.9289
+  },
+  {
+    "ubigeo": 50701,
+    "distance": -45.68,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3811,
+    "roads": 14.7,
+    "lat": 15.0333,
+    "lon": 73.7833
+  },
+  {
+    "ubigeo": 50702,
+    "distance": -38.15,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.425,
+    "roads": 72.86,
+    "lat": 15.1,
+    "lon": 73.7667
+  },
+  {
+    "ubigeo": 50703,
+    "distance": -29.55,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4779,
+    "roads": 0.0,
+    "lat": 14.8086,
+    "lon": 73.2911
+  },
+  {
+    "ubigeo": 50704,
+    "distance": -36.63,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3387,
+    "roads": 0.0,
+    "lat": 14.9514,
+    "lon": 73.3678
+  },
+  {
+    "ubigeo": 50706,
+    "distance": -16.13,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2205,
+    "roads": 69.96,
+    "lat": 15.25,
+    "lon": 73.5667
+  },
+  {
+    "ubigeo": 50707,
+    "distance": -33.38,
+    "isInside": true,
+    "consumption": 6.2727,
+    "stunting": 0.5965,
+    "roads": 0.0,
+    "lat": 14.9961,
+    "lon": 73.3522
+  },
+  {
+    "ubigeo": 50708,
+    "distance": -39.74,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5469,
+    "roads": 0.0,
+    "lat": 14.9017,
+    "lon": 73.4011
+  },
+  {
+    "ubigeo": 50801,
+    "distance": -6.79,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.1453,
+    "roads": 0.0,
+    "lat": 15.2797,
+    "lon": 73.3458
+  },
+  {
+    "ubigeo": 50802,
+    "distance": -14.16,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2364,
+    "roads": 0.0,
+    "lat": 15.1622,
+    "lon": 73.2947
+  },
+  {
+    "ubigeo": 50803,
+    "distance": -3.55,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2817,
+    "roads": 0.0,
+    "lat": 15.2625,
+    "lon": 73.2005
+  },
+  {
+    "ubigeo": 50804,
+    "distance": -13.92,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.1768,
+    "roads": 0.0,
+    "lat": 15.1844,
+    "lon": 73.3489
+  },
+  {
+    "ubigeo": 50805,
+    "distance": -16.86,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.1587,
+    "roads": 0.0,
+    "lat": 15.1506,
+    "lon": 73.3419
+  },
+  {
+    "ubigeo": 50806,
+    "distance": -8.0,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5328,
+    "roads": 0.0,
+    "lat": 15.1797,
+    "lon": 73.1861
+  },
+  {
+    "ubigeo": 50807,
+    "distance": -5.98,
+    "isInside": true,
+    "consumption": 6.45,
+    "stunting": 0.3667,
+    "roads": 0.0,
+    "lat": 15.3167,
+    "lon": 73.4833
+  },
+  {
+    "ubigeo": 50808,
+    "distance": -25.43,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2273,
+    "roads": 0.0,
+    "lat": 15.0622,
+    "lon": 73.315
+  },
+  {
+    "ubigeo": 50809,
+    "distance": -7.13,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3125,
+    "roads": 0.0,
+    "lat": 15.2247,
+    "lon": 73.2286
+  },
+  {
+    "ubigeo": 50810,
+    "distance": -12.03,
+    "isInside": true,
+    "consumption": 6.1606,
+    "stunting": 0.2295,
+    "roads": 0.0,
+    "lat": 15.2478,
+    "lon": 73.4539
+  },
+  {
+    "ubigeo": 80201,
+    "distance": -8.29,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4728,
+    "roads": 148.79,
+    "lat": 13.9167,
+    "lon": 71.6811
+  },
+  {
+    "ubigeo": 80202,
+    "distance": -22.61,
+    "isInside": true,
+    "consumption": 5.897,
+    "stunting": 0.3048,
+    "roads": 16.04,
+    "lat": 14.0586,
+    "lon": 71.4939
+  },
+  {
+    "ubigeo": 80203,
+    "distance": -1.31,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.369,
+    "roads": 63.06,
+    "lat": 13.9508,
+    "lon": 71.7372
+  },
+  {
+    "ubigeo": 80204,
+    "distance": -22.88,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4762,
+    "roads": 0.0,
+    "lat": 14.12,
+    "lon": 71.4728
+  },
+  {
+    "ubigeo": 80205,
+    "distance": -16.26,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4162,
+    "roads": 3.2,
+    "lat": 14.0269,
+    "lon": 71.5672
+  },
+  {
+    "ubigeo": 80206,
+    "distance": -4.88,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.505,
+    "roads": 0.0,
+    "lat": 13.7811,
+    "lon": 71.7778
+  },
+  {
+    "ubigeo": 80207,
+    "distance": -13.74,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3531,
+    "roads": 209.15,
+    "lat": 13.955,
+    "lon": 71.6028
+  },
+  {
+    "ubigeo": 80301,
+    "distance": 26.66,
+    "isInside": false,
+    "consumption": 6.3998,
+    "stunting": 0.3104,
+    "roads": 66.46,
+    "lat": 13.4631,
+    "lon": 72.1553
+  },
+  {
+    "ubigeo": 80302,
+    "distance": 23.86,
+    "isInside": false,
+    "consumption": 6.1455,
+    "stunting": 0.4653,
+    "roads": 0.0,
+    "lat": 13.45,
+    "lon": 72.3
+  },
+  {
+    "ubigeo": 80303,
+    "distance": 24.61,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3161,
+    "roads": 210.58,
+    "lat": 13.4817,
+    "lon": 72.0444
+  },
+  {
+    "ubigeo": 80304,
+    "distance": 6.09,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4802,
+    "roads": 151.21,
+    "lat": 13.6333,
+    "lon": 72.2339
+  },
+  {
+    "ubigeo": 80305,
+    "distance": 29.81,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4341,
+    "roads": 0.0,
+    "lat": 13.4167,
+    "lon": 72.2167
+  },
+  {
+    "ubigeo": 80306,
+    "distance": 19.06,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3555,
+    "roads": 0.0,
+    "lat": 13.4731,
+    "lon": 72.4331
+  },
+  {
+    "ubigeo": 80307,
+    "distance": 19.12,
+    "isInside": false,
+    "consumption": 6.4292,
+    "stunting": 0.2419,
+    "roads": 0.0,
+    "lat": 13.5167,
+    "lon": 72.5333
+  },
+  {
+    "ubigeo": 80308,
+    "distance": 27.28,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4328,
+    "roads": 0.0,
+    "lat": 13.4756,
+    "lon": 72.1161
+  },
+  {
+    "ubigeo": 80309,
+    "distance": 26.78,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.2914,
+    "roads": 0.0,
+    "lat": 13.4386,
+    "lon": 72.2661
+  },
+  {
+    "ubigeo": 80401,
+    "distance": 24.72,
+    "isInside": false,
+    "consumption": 6.1604,
+    "stunting": 0.3403,
+    "roads": 132.25,
+    "lat": 13.3333,
+    "lon": 71.95
+  },
+  {
+    "ubigeo": 80402,
+    "distance": 16.65,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.5074,
+    "roads": 54.89,
+    "lat": 13.3881,
+    "lon": 71.8997
+  },
+  {
+    "ubigeo": 80403,
+    "distance": 20.3,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.5282,
+    "roads": 45.35,
+    "lat": 13.3642,
+    "lon": 71.9239
+  },
+  {
+    "ubigeo": 80405,
+    "distance": 10.72,
+    "isInside": false,
+    "consumption": 5.9498,
+    "stunting": 0.4286,
+    "roads": 92.15,
+    "lat": 13.4225,
+    "lon": 71.8467
+  },
+  {
+    "ubigeo": 80406,
+    "distance": 3.16,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4172,
+    "roads": 151.3,
+    "lat": 13.4936,
+    "lon": 71.7739
+  },
+  {
+    "ubigeo": 80407,
+    "distance": 11.12,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4091,
+    "roads": 179.77,
+    "lat": 13.4275,
+    "lon": 71.8675
+  },
+  {
+    "ubigeo": 80501,
+    "distance": -26.26,
+    "isInside": true,
+    "consumption": 6.5027,
+    "stunting": 0.4664,
+    "roads": 52.46,
+    "lat": 14.2181,
+    "lon": 71.4317
+  },
+  {
+    "ubigeo": 80502,
+    "distance": -38.55,
+    "isInside": true,
+    "consumption": 5.3822,
+    "stunting": 0.3635,
+    "roads": 0.0,
+    "lat": 14.4728,
+    "lon": 71.3939
+  },
+  {
+    "ubigeo": 80504,
+    "distance": -47.72,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3024,
+    "roads": 0.0,
+    "lat": 14.4319,
+    "lon": 71.2731
+  },
+  {
+    "ubigeo": 80506,
+    "distance": -23.81,
+    "isInside": true,
+    "consumption": 5.7637,
+    "stunting": 0.3775,
+    "roads": 0.0,
+    "lat": 14.1464,
+    "lon": 71.4594
+  },
+  {
+    "ubigeo": 80507,
+    "distance": -27.46,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4389,
+    "roads": 136.63,
+    "lat": 14.38,
+    "lon": 71.455
+  },
+  {
+    "ubigeo": 80508,
+    "distance": -21.59,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4822,
+    "roads": 0.0,
+    "lat": 14.1639,
+    "lon": 71.4767
+  },
+  {
+    "ubigeo": 80601,
+    "distance": -49.02,
+    "isInside": true,
+    "consumption": 6.3647,
+    "stunting": 0.2929,
+    "roads": 0.0,
+    "lat": 14.2694,
+    "lon": 71.2261
+  },
+  {
+    "ubigeo": 80602,
+    "distance": -28.15,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4335,
+    "roads": 1.2,
+    "lat": 14.0269,
+    "lon": 71.4528
+  },
+  {
+    "ubigeo": 80603,
+    "distance": -27.83,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.425,
+    "roads": 0.0,
+    "lat": 14.1011,
+    "lon": 71.4294
+  },
+  {
+    "ubigeo": 80605,
+    "distance": -34.15,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5217,
+    "roads": 0.0,
+    "lat": 13.9722,
+    "lon": 71.41
+  },
+  {
+    "ubigeo": 80606,
+    "distance": -38.71,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3903,
+    "roads": 0.0,
+    "lat": 14.2028,
+    "lon": 71.3156
+  },
+  {
+    "ubigeo": 80607,
+    "distance": -35.9,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2632,
+    "roads": 0.0,
+    "lat": 14.1867,
+    "lon": 71.3417
+  },
+  {
+    "ubigeo": 80608,
+    "distance": -29.39,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2882,
+    "roads": 0.0,
+    "lat": 14.145,
+    "lon": 71.4069
+  },
+  {
+    "ubigeo": 80701,
+    "distance": -23.11,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.486,
+    "roads": 27.17,
+    "lat": 14.4456,
+    "lon": 72.0842
+  },
+  {
+    "ubigeo": 80702,
+    "distance": -4.25,
+    "isInside": true,
+    "consumption": 5.2453,
+    "stunting": 0.561,
+    "roads": 0.0,
+    "lat": 14.0081,
+    "lon": 71.998
+  },
+  {
+    "ubigeo": 80703,
+    "distance": -10.54,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4849,
+    "roads": 32.48,
+    "lat": 14.3083,
+    "lon": 71.8431
+  },
+  {
+    "ubigeo": 80704,
+    "distance": -19.44,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4219,
+    "roads": 82.57,
+    "lat": 14.2822,
+    "lon": 72.0419
+  },
+  {
+    "ubigeo": 80705,
+    "distance": -2.64,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5657,
+    "roads": 50.97,
+    "lat": 14.3019,
+    "lon": 71.6872
+  },
+  {
+    "ubigeo": 80706,
+    "distance": -28.9,
+    "isInside": true,
+    "consumption": 5.6544,
+    "stunting": 0.616,
+    "roads": 65.78,
+    "lat": 14.3311,
+    "lon": 72.1147
+  },
+  {
+    "ubigeo": 80707,
+    "distance": -29.08,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.6375,
+    "roads": 63.54,
+    "lat": 14.3078,
+    "lon": 72.1361
+  },
+  {
+    "ubigeo": 80708,
+    "distance": -17.63,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4488,
+    "roads": 63.33,
+    "lat": 14.5089,
+    "lon": 71.8853
+  },
+  {
+    "ubigeo": 80801,
+    "distance": -21.1,
+    "isInside": true,
+    "consumption": 6.4514,
+    "stunting": 0.3157,
+    "roads": 44.94,
+    "lat": 14.7914,
+    "lon": 71.4125
+  },
+  {
+    "ubigeo": 80802,
+    "distance": -9.06,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4,
+    "roads": 53.89,
+    "lat": 15.24,
+    "lon": 71.0822
+  },
+  {
+    "ubigeo": 80803,
+    "distance": -19.68,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4218,
+    "roads": 28.04,
+    "lat": 14.8,
+    "lon": 71.5325
+  },
+  {
+    "ubigeo": 80804,
+    "distance": -6.33,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2857,
+    "roads": 101.38,
+    "lat": 15.0525,
+    "lon": 71.1289
+  },
+  {
+    "ubigeo": 80805,
+    "distance": -18.3,
+    "isInside": true,
+    "consumption": 5.7008,
+    "stunting": 0.4119,
+    "roads": 62.56,
+    "lat": 14.8839,
+    "lon": 71.2208
+  },
+  {
+    "ubigeo": 80806,
+    "distance": -33.05,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4161,
+    "roads": 8.41,
+    "lat": 14.6814,
+    "lon": 71.4169
+  },
+  {
+    "ubigeo": 80807,
+    "distance": -1.41,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4417,
+    "roads": 0.0,
+    "lat": 15.0689,
+    "lon": 71.7492
+  },
+  {
+    "ubigeo": 80808,
+    "distance": -31.25,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3744,
+    "roads": 38.34,
+    "lat": 14.7694,
+    "lon": 71.2542
+  },
+  {
+    "ubigeo": 81001,
+    "distance": 2.82,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3395,
+    "roads": 216.86,
+    "lat": 13.7633,
+    "lon": 71.8494
+  },
+  {
+    "ubigeo": 81002,
+    "distance": 6.61,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4736,
+    "roads": 61.71,
+    "lat": 13.9739,
+    "lon": 71.8267
+  },
+  {
+    "ubigeo": 81003,
+    "distance": 2.41,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.5529,
+    "roads": 0.0,
+    "lat": 13.8539,
+    "lon": 72.0806
+  },
+  {
+    "ubigeo": 81004,
+    "distance": 0.23,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3688,
+    "roads": 119.64,
+    "lat": 13.8519,
+    "lon": 71.8033
+  },
+  {
+    "ubigeo": 81005,
+    "distance": 16.67,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4224,
+    "roads": 0.0,
+    "lat": 13.6836,
+    "lon": 72.0194
+  },
+  {
+    "ubigeo": 81006,
+    "distance": 2.58,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.5908,
+    "roads": 0.0,
+    "lat": 14.0714,
+    "lon": 71.7397
+  },
+  {
+    "ubigeo": 81007,
+    "distance": 13.65,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3646,
+    "roads": 273.79,
+    "lat": 13.7592,
+    "lon": 71.955
+  },
+  {
+    "ubigeo": 81008,
+    "distance": 0.24,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3964,
+    "roads": 69.85,
+    "lat": 13.9542,
+    "lon": 71.7597
+  },
+  {
+    "ubigeo": 81009,
+    "distance": 9.36,
+    "isInside": false,
+    "consumption": 5.6618,
+    "stunting": 0.4427,
+    "roads": 160.61,
+    "lat": 13.6669,
+    "lon": 71.9211
+  },
+  {
+    "ubigeo": 81102,
+    "distance": 0.29,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.451,
+    "roads": 121.42,
+    "lat": 13.595,
+    "lon": 71.6994
+  },
+  {
+    "ubigeo": 81103,
+    "distance": 32.48,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.4887,
+    "roads": 20.11,
+    "lat": 13.2042,
+    "lon": 71.6544
+  },
+  {
+    "ubigeo": 81104,
+    "distance": 19.99,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.5182,
+    "roads": 61.29,
+    "lat": 13.3558,
+    "lon": 71.6697
+  },
+  {
+    "ubigeo": 81105,
+    "distance": 6.05,
+    "isInside": false,
+    "consumption": 6.0625,
+    "stunting": 0.5378,
+    "roads": 143.29,
+    "lat": 13.5167,
+    "lon": 71.65
+  },
+  {
+    "ubigeo": 81201,
+    "distance": -6.24,
+    "isInside": true,
+    "consumption": 6.4144,
+    "stunting": 0.4388,
+    "roads": 0.0,
+    "lat": 13.6861,
+    "lon": 71.6228
+  },
+  {
+    "ubigeo": 81202,
+    "distance": -4.11,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3571,
+    "roads": 20.29,
+    "lat": 13.6725,
+    "lon": 71.6794
+  },
+  {
+    "ubigeo": 81204,
+    "distance": -8.92,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5506,
+    "roads": 0.0,
+    "lat": 13.59,
+    "lon": 71.39
+  },
+  {
+    "ubigeo": 81205,
+    "distance": -1.32,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5863,
+    "roads": 0.0,
+    "lat": 13.6047,
+    "lon": 71.5594
+  },
+  {
+    "ubigeo": 81206,
+    "distance": -26.03,
+    "isInside": true,
+    "consumption": 6.076,
+    "stunting": 0.4937,
+    "roads": 0.0,
+    "lat": 13.9075,
+    "lon": 71.4986
+  },
+  {
+    "ubigeo": 81207,
+    "distance": -5.78,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3782,
+    "roads": 0.0,
+    "lat": 13.6883,
+    "lon": 71.6358
+  },
+  {
+    "ubigeo": 81210,
+    "distance": -12.83,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.5033,
+    "roads": 0.0,
+    "lat": 13.6269,
+    "lon": 71.3853
+  },
+  {
+    "ubigeo": 81212,
+    "distance": -23.86,
+    "isInside": true,
+    "consumption": 5.4778,
+    "stunting": 0.4985,
+    "roads": 0.0,
+    "lat": 13.8228,
+    "lon": 71.5394
+  },
+  {
+    "ubigeo": 81301,
+    "distance": 39.51,
+    "isInside": false,
+    "consumption": 6.4891,
+    "stunting": 0.2746,
+    "roads": 92.37,
+    "lat": 13.3078,
+    "lon": 72.1153
+  },
+  {
+    "ubigeo": 81302,
+    "distance": 28.76,
+    "isInside": false,
+    "consumption": 5.6885,
+    "stunting": 0.4251,
+    "roads": 102.86,
+    "lat": 13.3958,
+    "lon": 72.0547
+  },
+  {
+    "ubigeo": 81303,
+    "distance": 32.79,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.3587,
+    "roads": 105.4,
+    "lat": 13.3464,
+    "lon": 72.0672
+  },
+  {
+    "ubigeo": 81305,
+    "distance": 41.84,
+    "isInside": false,
+    "consumption": 6.0859,
+    "stunting": 0.4121,
+    "roads": 147.52,
+    "lat": 13.3197,
+    "lon": 72.1528
+  },
+  {
+    "ubigeo": 81306,
+    "distance": 45.37,
+    "isInside": false,
+    "consumption": 5.5585,
+    "stunting": 0.3703,
+    "roads": 84.71,
+    "lat": 13.2547,
+    "lon": 72.2633
+  },
+  {
+    "ubigeo": 81307,
+    "distance": 36.65,
+    "isInside": false,
+    "consumption": null,
+    "stunting": 0.1933,
+    "roads": 189.03,
+    "lat": 13.3167,
+    "lon": 72.0892
+  },
+  {
+    "ubigeo": 210705,
+    "distance": -25.46,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2555,
+    "roads": 0.0,
+    "lat": 15.1111,
+    "lon": 70.9078
+  },
+  {
+    "ubigeo": 210706,
+    "distance": -49.29,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4386,
+    "roads": 0.0,
+    "lat": 15.2336,
+    "lon": 70.5972
+  },
+  {
+    "ubigeo": 210707,
+    "distance": -40.3,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.542,
+    "roads": 0.0,
+    "lat": 15.4525,
+    "lon": 70.5986
+  },
+  {
+    "ubigeo": 210709,
+    "distance": -31.66,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.2153,
+    "roads": 0.0,
+    "lat": 15.7,
+    "lon": 70.6053
+  },
+  {
+    "ubigeo": 210710,
+    "distance": -46.55,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.339,
+    "roads": 0.0,
+    "lat": 15.1869,
+    "lon": 70.66
+  },
+  {
+    "ubigeo": 210803,
+    "distance": -37.71,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.4364,
+    "roads": 19.61,
+    "lat": 14.9061,
+    "lon": 70.8742
+  },
+  {
+    "ubigeo": 210804,
+    "distance": -35.12,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3974,
+    "roads": 84.55,
+    "lat": 14.9333,
+    "lon": 70.8828
+  },
+  {
+    "ubigeo": 210805,
+    "distance": -45.38,
+    "isInside": true,
+    "consumption": null,
+    "stunting": 0.3716,
+    "roads": 0.0,
+    "lat": 14.7686,
+    "lon": 70.9019
+  }
+]

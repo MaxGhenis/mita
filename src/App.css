@@ -1,38 +1,171 @@
+/* Design system from maxghenis.com */
+:root {
+  --accent: #319795;
+  --accent-dark: #2C7A7B;
+  --black: 15, 18, 25;
+  --gray: 96, 115, 159;
+  --gray-light: 229, 233, 240;
+  --gray-dark: 34, 41, 57;
+  --gray-gradient: rgba(var(--gray-light), 50%), #fff;
+  --box-shadow:
+    0 2px 6px rgba(var(--gray), 25%),
+    0 8px 24px rgba(var(--gray), 33%),
+    0 16px 32px rgba(var(--gray), 33%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(var(--gray-gradient)) no-repeat;
+  background-size: 100% 600px;
+  color: rgb(var(--gray-dark));
+  font-size: 18px;
+  line-height: 1.7;
+}
+
 .App {
+  min-height: 100vh;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  color: var(--accent-dark);
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 0.5rem 0;
+  color: rgb(var(--black));
+  line-height: 1.2;
+}
+
+/* Chart titles */
+.chart-title {
+  margin: 0 0 0.75rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: rgb(var(--gray-dark));
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* RDD Chart */
+.rdd-chart {
+  width: 100%;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
+.data-source-badge {
+  background: var(--accent);
   color: white;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  display: inline-block;
+  margin-bottom: 0.5rem;
 }
 
-.App-link {
-  color: #61dafb;
+.stats-note {
+  margin-top: 0.5rem;
+  font-size: 0.85rem;
+  color: rgb(var(--gray));
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.chart-annotation {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgb(var(--gray-light));
+  border-radius: 4px;
+  border-left: 4px solid var(--accent);
+}
+
+.discontinuity-note {
+  margin: 0 0 0.5rem 0;
+  color: var(--accent-dark);
+  font-size: 0.95rem;
+}
+
+.methodology-note {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgb(var(--gray));
+}
+
+/* Map */
+.mita-map {
+  width: 100%;
+}
+
+.map-legend {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: rgb(var(--gray-light));
+  border-radius: 4px;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+.legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 3px;
+}
+
+.legend-color.mita-region {
+  background: rgba(231, 76, 60, 0.5);
+  border: 2px solid #c0392b;
+}
+
+.legend-color.outside-region {
+  background: rgba(160, 174, 192, 0.5);
+  border: 2px solid #718096;
+}
+
+.map-annotation {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: rgb(var(--gray-light));
+  border-radius: 4px;
+  border-left: 4px solid #c0392b;
+}
+
+.map-annotation p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: rgb(var(--gray-dark));
+}
+
+/* Leaflet overrides */
+.leaflet-container {
+  border-radius: 8px;
+}
+
+.leaflet-popup-content {
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.leaflet-popup-content strong {
+  color: rgb(var(--gray-dark));
+}
+
+/* Recharts tooltip */
+.recharts-tooltip-wrapper {
+  font-size: 0.9rem;
 }
