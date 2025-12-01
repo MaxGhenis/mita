@@ -72,7 +72,7 @@ const steps: StepData[] = [
   {
     id: 'consumption',
     title: 'The controlled estimate',
-    text: 'Dell\'s paper uses polynomial RD with controls for elevation, slope, and other geographic factors. The refined estimate: 25% lower consumption in mita districts. The robust result confirms this isn\'t driven by geography.',
+    text: 'Dell\'s paper uses polynomial RD with controls for elevation, slope, and other geographic factors. The refined estimate: 22% lower consumption in mita districts. The robust result confirms this isn\'t driven by geography.',
     visual: 'rdd-consumption',
     rddPhase: 'effect',
   },

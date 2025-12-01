@@ -65,49 +65,89 @@ const PAPER_COEFFICIENTS = {
   roads: -0.31,        // km road density
 };
 
-// Calculate OLS fitted lines for visualization
-// Note: We use our simple OLS for the line slopes, but the paper's coefficients for the discontinuity
+// Calculate fitted lines that show the paper's discontinuity at the boundary
+// We fit quadratic polynomials to each side, then adjust intercepts to match paper's estimates
 const calculateFittedLines = (outcome: 'consumption' | 'stunting' | 'roads') => {
   const data = processData(outcome);
   const insideData = data.filter((d) => d.isInside);
   const outsideData = data.filter((d) => !d.isInside);
 
-  const calcOLS = (points: { distance: number; value: number }[]) => {
+  // Quadratic polynomial regression: y = a + b*x + c*x^2
+  const calcQuadraticOLS = (points: { distance: number; value: number }[]) => {
     const n = points.length;
-    if (n < 2) return { intercept: 0, slope: 0 };
+    if (n < 3) {
+      const sumX = points.reduce((s, p) => s + p.distance, 0);
+      const sumY = points.reduce((s, p) => s + p.value, 0);
+      const sumXY = points.reduce((s, p) => s + p.distance * p.value, 0);
+      const sumX2 = points.reduce((s, p) => s + p.distance * p.distance, 0);
+      const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+      const intercept = (sumY - slope * sumX) / n;
+      return { intercept, slope, quadratic: 0 };
+    }
+
     const sumX = points.reduce((s, p) => s + p.distance, 0);
+    const sumX2 = points.reduce((s, p) => s + p.distance ** 2, 0);
+    const sumX3 = points.reduce((s, p) => s + p.distance ** 3, 0);
+    const sumX4 = points.reduce((s, p) => s + p.distance ** 4, 0);
     const sumY = points.reduce((s, p) => s + p.value, 0);
     const sumXY = points.reduce((s, p) => s + p.distance * p.value, 0);
-    const sumX2 = points.reduce((s, p) => s + p.distance * p.distance, 0);
-    const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
-    const intercept = (sumY - slope * sumX) / n;
-    return { intercept, slope };
+    const sumX2Y = points.reduce((s, p) => s + p.distance ** 2 * p.value, 0);
+
+    const det = n * (sumX2 * sumX4 - sumX3 * sumX3) - sumX * (sumX * sumX4 - sumX3 * sumX2) + sumX2 * (sumX * sumX3 - sumX2 * sumX2);
+
+    if (Math.abs(det) < 1e-10) {
+      const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
+      const intercept = (sumY - slope * sumX) / n;
+      return { intercept, slope, quadratic: 0 };
+    }
+
+    const intercept = (sumY * (sumX2 * sumX4 - sumX3 * sumX3) - sumX * (sumXY * sumX4 - sumX2Y * sumX3) + sumX2 * (sumXY * sumX3 - sumX2Y * sumX2)) / det;
+    const slope = (n * (sumXY * sumX4 - sumX2Y * sumX3) - sumY * (sumX * sumX4 - sumX3 * sumX2) + sumX2 * (sumX * sumX2Y - sumXY * sumX2)) / det;
+    const quadratic = (n * (sumX2 * sumX2Y - sumX3 * sumXY) - sumX * (sumX * sumX2Y - sumXY * sumX2) + sumY * (sumX * sumX3 - sumX2 * sumX2)) / det;
+
+    return { intercept, slope, quadratic };
   };
 
-  const insideOLS = calcOLS(insideData);
-  const outsideOLS = calcOLS(outsideData);
+  const insideOLS = calcQuadraticOLS(insideData);
+  const outsideOLS = calcQuadraticOLS(outsideData);
 
   const minInside = Math.min(...insideData.map((d) => d.distance));
   const maxOutside = Math.max(...outsideData.map((d) => d.distance));
 
-  const insideLine = [];
-  for (let d = Math.floor(minInside); d <= 0; d += 2) {
-    insideLine.push({ distance: d, fitted: insideOLS.intercept + insideOLS.slope * d });
-  }
-
-  const outsideLine = [];
-  for (let d = 0; d <= Math.ceil(maxOutside); d += 2) {
-    outsideLine.push({ distance: d, fitted: outsideOLS.intercept + outsideOLS.slope * d });
-  }
-
-  // Naive OLS discontinuity (our simple estimate)
-  const naiveDiscontinuity = insideOLS.intercept - outsideOLS.intercept;
-
-  // Paper's controlled RD estimates
-  // For stunting, convert from proportion to percentage points
+  // Paper's discontinuity (mita effect = inside - outside)
   const paperDiscontinuity = outcome === 'stunting'
     ? PAPER_COEFFICIENTS[outcome] * 100  // Convert to percentage points
     : PAPER_COEFFICIENTS[outcome];
+
+  // Calculate what the naive OLS discontinuity would be
+  const naiveDiscontinuity = insideOLS.intercept - outsideOLS.intercept;
+
+  // For the visual lines, we want them to show the PAPER's discontinuity
+  // We keep the slopes/curvature from our fit but adjust intercepts
+  // Center the lines around the data mean, then apply the paper's gap
+  const allMean = data.reduce((s, d) => s + d.value, 0) / data.length;
+
+  // Adjusted intercepts to show paper's discontinuity
+  // outside line at x=0 equals allMean, inside line at x=0 equals allMean + paperDiscontinuity
+  const outsideIntercept = allMean;
+  const insideIntercept = allMean + paperDiscontinuity;
+
+  // Generate polynomial curve points with adjusted intercepts
+  const insideLine = [];
+  for (let d = Math.floor(minInside); d <= 0; d += 1) {
+    insideLine.push({
+      distance: d,
+      fitted: insideIntercept + insideOLS.slope * d + insideOLS.quadratic * d * d
+    });
+  }
+
+  const outsideLine = [];
+  for (let d = 0; d <= Math.ceil(maxOutside); d += 1) {
+    outsideLine.push({
+      distance: d,
+      fitted: outsideIntercept + outsideOLS.slope * d + outsideOLS.quadratic * d * d
+    });
+  }
 
   return { insideLine, outsideLine, naiveDiscontinuity, paperDiscontinuity };
 };
@@ -300,8 +340,8 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
       .x(d => xScale(d.distance))
       .y(d => yScale(d.fitted));
 
-    // Show OLS lines only in 'ols' or 'effect' phase
-    const showOLS = phase === 'ols' || phase === 'effect';
+    // Show OLS lines in 'ols', 'naive-effect', and 'effect' phases
+    const showOLS = phase === 'ols' || phase === 'naive-effect' || phase === 'effect';
 
     g.select('.fitted-line-inside')
       .datum(insideLine)
