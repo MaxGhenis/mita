@@ -57,7 +57,16 @@ const processData = (outcome: 'consumption' | 'stunting' | 'roads') => {
     });
 };
 
-// Calculate OLS fitted lines
+// Dell (2010) regression discontinuity estimates (Table 2)
+// These are the proper econometric estimates with controls
+const PAPER_COEFFICIENTS = {
+  consumption: -0.25,  // log points (≈ -22% consumption)
+  stunting: 0.06,      // 6 percentage points higher stunting
+  roads: -0.31,        // km road density
+};
+
+// Calculate OLS fitted lines for visualization
+// Note: We use our simple OLS for the line slopes, but the paper's coefficients for the discontinuity
 const calculateFittedLines = (outcome: 'consumption' | 'stunting' | 'roads') => {
   const data = processData(outcome);
   const insideData = data.filter((d) => d.isInside);
@@ -91,7 +100,12 @@ const calculateFittedLines = (outcome: 'consumption' | 'stunting' | 'roads') => 
     outsideLine.push({ distance: d, fitted: outsideOLS.intercept + outsideOLS.slope * d });
   }
 
-  const discontinuity = outsideOLS.intercept - insideOLS.intercept;
+  // Use the paper's regression discontinuity estimates
+  // For stunting, convert from proportion to percentage points
+  const discontinuity = outcome === 'stunting'
+    ? PAPER_COEFFICIENTS[outcome] * 100  // Convert to percentage points
+    : PAPER_COEFFICIENTS[outcome];
+
   return { insideLine, outsideLine, discontinuity };
 };
 
@@ -129,16 +143,16 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         Math.ceil(Math.max(...data.map(d => d.y)) * 1.05)
       ];
 
-  // Format discontinuity
+  // Format discontinuity (mita effect = inside - outside)
   const formatDiscontinuity = () => {
     if (outcome === 'consumption') {
       const pctChange = (Math.exp(discontinuity) - 1) * 100;
-      return `${pctChange > 0 ? '+' : ''}${pctChange.toFixed(1)}% consumption at boundary`;
+      return `${pctChange.toFixed(1)}% consumption in mita districts`;
     } else if (outcome === 'stunting') {
       const ppChange = discontinuity;
-      return `${ppChange > 0 ? '+' : ''}${ppChange.toFixed(1)}pp stunting at boundary`;
+      return `${ppChange > 0 ? '+' : ''}${ppChange.toFixed(1)}pp stunting in mita districts`;
     } else {
-      return `${discontinuity > 0 ? '+' : ''}${discontinuity.toFixed(1)} km road density at boundary`;
+      return `${discontinuity.toFixed(1)} km road density in mita districts`;
     }
   };
 
@@ -313,22 +327,23 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
     if (insideY0 !== undefined && outsideY0 !== undefined) {
       const y1 = yScale(insideY0);
       const y2 = yScale(outsideY0);
-      const xPos = xScale(0) + 5; // Position brace close to boundary
+      const xPos = xScale(0) - 5; // Position brace on LEFT side of boundary (mita side)
       const braceWidth = 8;
 
-      // Create curly brace path - a horizontal { rotated 90 degrees
+      // Create curly brace path - opens to the LEFT (toward mita region)
       const createBracePath = (x: number, yTop: number, yBottom: number, width: number) => {
         const midY = (yTop + yBottom) / 2;
         const height = Math.abs(yBottom - yTop);
         const curveSize = Math.min(height * 0.12, 6);
 
+        // Mirror the brace to open leftward
         return `M ${x} ${yTop}
-                Q ${x + width} ${yTop}, ${x + width} ${yTop + curveSize * 2}
-                L ${x + width} ${midY - curveSize}
-                Q ${x + width} ${midY}, ${x + width * 1.8} ${midY}
-                Q ${x + width} ${midY}, ${x + width} ${midY + curveSize}
-                L ${x + width} ${yBottom - curveSize * 2}
-                Q ${x + width} ${yBottom}, ${x} ${yBottom}`;
+                Q ${x - width} ${yTop}, ${x - width} ${yTop + curveSize * 2}
+                L ${x - width} ${midY - curveSize}
+                Q ${x - width} ${midY}, ${x - width * 1.8} ${midY}
+                Q ${x - width} ${midY}, ${x - width} ${midY + curveSize}
+                L ${x - width} ${yBottom - curveSize * 2}
+                Q ${x - width} ${yBottom}, ${x} ${yBottom}`;
       };
 
       g.select('.treatment-brace')
@@ -340,7 +355,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('stroke-width', 2)
         .attr('opacity', showEffect ? 1 : 0);
 
-      // Format treatment effect label
+      // Format treatment effect label (mita effect = inside - outside)
       const formatEffect = () => {
         if (outcome === 'consumption') {
           const pctChange = (Math.exp(discontinuity) - 1) * 100;
@@ -352,12 +367,13 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         }
       };
 
-      const labelX = xPos + braceWidth * 2 + 8;
-      const labelY = (y1 + y2) / 2;
       const labelText = showEffect ? formatEffect() : '';
       const labelPadding = { x: 6, y: 4 };
       const labelWidth = labelText.length * 7 + labelPadding.x * 2;
       const labelHeight = 18;
+      // Position label to the LEFT of the brace
+      const labelX = xPos - braceWidth * 2 - labelWidth + labelPadding.x;
+      const labelY = (y1 + y2) / 2;
 
       // Background box for label
       g.select('.treatment-label-bg')
@@ -471,7 +487,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
 
       <div className="chart-annotation">
         <p className="discontinuity-note">
-          <strong>The discontinuity:</strong> {formatDiscontinuity()}
+          <strong>Mita effect:</strong> {formatDiscontinuity()}
         </p>
         <p className="methodology-note">
           Simply comparing mita vs. non-mita districts would be misleading—maybe mita regions differed
