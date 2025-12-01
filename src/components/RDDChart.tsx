@@ -383,25 +383,43 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
     // Show OLS lines in 'ols', 'naive-effect', and 'effect' phases
     const showOLS = phase === 'ols' || phase === 'naive-effect' || phase === 'effect';
 
-    g.select('.fitted-line-inside')
-      .datum(insideLine)
-      .transition()
-      .duration(500)
-      .attr('d', lineGenerator)
-      .attr('fill', 'none')
-      .attr('stroke', colors.mitaDark)
-      .attr('stroke-width', 3)
-      .attr('opacity', showOLS ? 1 : 0);
+    // For 'dots' phase, set opacity immediately without transition to prevent flash
+    const insideLineEl = g.select('.fitted-line-inside').datum(insideLine);
+    const outsideLineEl = g.select('.fitted-line-outside').datum(outsideLine);
 
-    g.select('.fitted-line-outside')
-      .datum(outsideLine)
-      .transition()
-      .duration(500)
-      .attr('d', lineGenerator)
-      .attr('fill', 'none')
-      .attr('stroke', colors.nonmita)
-      .attr('stroke-width', 3)
-      .attr('opacity', showOLS ? 1 : 0);
+    if (phase === 'dots') {
+      // No transition - immediately hide
+      insideLineEl
+        .attr('d', lineGenerator)
+        .attr('fill', 'none')
+        .attr('stroke', colors.mitaDark)
+        .attr('stroke-width', 3)
+        .attr('opacity', 0);
+      outsideLineEl
+        .attr('d', lineGenerator)
+        .attr('fill', 'none')
+        .attr('stroke', colors.nonmita)
+        .attr('stroke-width', 3)
+        .attr('opacity', 0);
+    } else {
+      // Transition for other phases
+      insideLineEl
+        .transition()
+        .duration(500)
+        .attr('d', lineGenerator)
+        .attr('fill', 'none')
+        .attr('stroke', colors.mitaDark)
+        .attr('stroke-width', 3)
+        .attr('opacity', showOLS ? 1 : 0);
+      outsideLineEl
+        .transition()
+        .duration(500)
+        .attr('d', lineGenerator)
+        .attr('fill', 'none')
+        .attr('stroke', colors.nonmita)
+        .attr('stroke-width', 3)
+        .attr('opacity', showOLS ? 1 : 0);
+    }
 
     // Show treatment effect brace only in 'effect' phase
     const showEffect = phase === 'naive-effect' || phase === 'effect';
@@ -455,14 +473,14 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
       };
 
       const labelText = showEffect ? formatEffect() : '';
-      const labelPadding = { x: 6, y: 4 };
-      const labelWidth = labelText.length * 7 + labelPadding.x * 2;
-      const labelHeight = 18;
+      const labelPadding = { x: 10, y: 6 };
+      const labelWidth = labelText.length * 10 + labelPadding.x * 2;
+      const labelHeight = 28;
       // Position label to the RIGHT of the brace
       const labelX = xPos + braceWidth * 2;
       const labelY = (y1 + y2) / 2;
 
-      // Background box for label
+      // Background box for label - more opaque and larger
       g.select('.treatment-label-bg')
         .transition()
         .duration(500)
@@ -470,10 +488,10 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('y', labelY - labelHeight / 2)
         .attr('width', labelWidth)
         .attr('height', labelHeight)
-        .attr('rx', 3)
+        .attr('rx', 4)
         .attr('fill', 'white')
         .attr('stroke', colors.mitaDark)
-        .attr('stroke-width', 1.5)
+        .attr('stroke-width', 2)
         .attr('opacity', showEffect ? 1 : 0);
 
       g.select('.treatment-label')
@@ -482,7 +500,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('x', labelX)
         .attr('y', labelY)
         .attr('dy', '0.35em')
-        .attr('font-size', '11px')
+        .attr('font-size', '14px')
         .attr('font-weight', '700')
         .attr('fill', colors.mitaDark)
         .attr('opacity', showEffect ? 1 : 0)

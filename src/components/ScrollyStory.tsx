@@ -17,7 +17,7 @@ const steps: StepData[] = [
   {
     id: 'intro',
     title: 'The mining mita',
-    text: 'In 1573, the Spanish colonial government established the mita—a forced labor system that shaped Peru\'s economic geography for centuries. Melissa Dell\'s landmark 2010 study shows how it still affects household consumption, child health, and infrastructure today.',
+    text: 'In 1573, the Spanish colonial government established the mita—a forced labor system that shaped Peru\'s economic geography for centuries. Melissa Dell\'s landmark 2010 study shows how it continues to affect household consumption, child health, and infrastructure today.',
     visual: 'intro',
   },
   {
