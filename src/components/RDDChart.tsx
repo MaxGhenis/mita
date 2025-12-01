@@ -1,6 +1,7 @@
 import React, { useMemo, useRef, useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import mitaData from '../data/mitaData.json';
+import { colors } from '../colors';
 
 interface RDDChartProps {
   outcome: 'consumption' | 'stunting' | 'roads';
@@ -164,7 +165,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('width', xScale(0) - xScale(-50))
         .attr('y', 0)
         .attr('height', innerHeight)
-        .attr('fill', '#e74c3c')
+        .attr('fill', colors.mita)
         .attr('opacity', 0.08);
 
       g.append('rect')
@@ -173,7 +174,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('width', xScale(50) - xScale(0))
         .attr('y', 0)
         .attr('height', innerHeight)
-        .attr('fill', '#718096')
+        .attr('fill', colors.nonmita)
         .attr('opacity', 0.08);
 
       // Region labels
@@ -181,7 +182,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('x', xScale(-25))
         .attr('y', 20)
         .attr('text-anchor', 'middle')
-        .attr('fill', '#c0392b')
+        .attr('fill', colors.mitaDark)
         .attr('font-size', '13px')
         .attr('font-weight', '600')
         .text('Mita');
@@ -190,7 +191,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('x', xScale(25))
         .attr('y', 20)
         .attr('text-anchor', 'middle')
-        .attr('fill', '#718096')
+        .attr('fill', colors.nonmita)
         .attr('font-size', '13px')
         .attr('font-weight', '600')
         .text('Non-mita');
@@ -201,13 +202,13 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('transform', `translate(0,${innerHeight})`)
         .call(d3.axisBottom(xScale).tickSize(-innerHeight).tickFormat(() => ''))
         .call(g => g.select('.domain').remove())
-        .call(g => g.selectAll('.tick line').attr('stroke', '#e0e0e0').attr('stroke-dasharray', '3,3'));
+        .call(g => g.selectAll('.tick line').attr('stroke', colors.gridLine).attr('stroke-dasharray', '3,3'));
 
       g.append('g')
         .attr('class', 'grid-y')
         .call(d3.axisLeft(yScale).tickSize(-innerWidth).tickFormat(() => ''))
         .call(g => g.select('.domain').remove())
-        .call(g => g.selectAll('.tick line').attr('stroke', '#e0e0e0').attr('stroke-dasharray', '3,3'));
+        .call(g => g.selectAll('.tick line').attr('stroke', colors.gridLine).attr('stroke-dasharray', '3,3'));
 
       // Axes
       g.append('g')
@@ -234,7 +235,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('x2', xScale(0))
         .attr('y1', 0)
         .attr('y2', innerHeight)
-        .attr('stroke', '#718096')
+        .attr('stroke', colors.nonmita)
         .attr('stroke-width', 2)
         .attr('stroke-dasharray', '5,5');
 
@@ -271,7 +272,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
       .duration(500)
       .call(d3.axisLeft(yScale).tickSize(-innerWidth).tickFormat(() => ''))
       .call(g => g.select('.domain').remove())
-      .call(g => g.selectAll('.tick line').attr('stroke', '#e0e0e0').attr('stroke-dasharray', '3,3'));
+      .call(g => g.selectAll('.tick line').attr('stroke', colors.gridLine).attr('stroke-dasharray', '3,3'));
 
     // Update fitted lines
     const lineGenerator = d3.line<{ distance: number; fitted: number }>()
@@ -287,7 +288,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
       .duration(500)
       .attr('d', lineGenerator)
       .attr('fill', 'none')
-      .attr('stroke', '#c0392b')
+      .attr('stroke', colors.mitaDark)
       .attr('stroke-width', 3)
       .attr('opacity', showOLS ? 1 : 0);
 
@@ -297,7 +298,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
       .duration(500)
       .attr('d', lineGenerator)
       .attr('fill', 'none')
-      .attr('stroke', '#718096')
+      .attr('stroke', colors.nonmita)
       .attr('stroke-width', 3)
       .attr('opacity', showOLS ? 1 : 0);
 
@@ -334,7 +335,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .duration(500)
         .attr('d', createBracePath(xPos, Math.min(y1, y2), Math.max(y1, y2), braceWidth))
         .attr('fill', 'none')
-        .attr('stroke', '#2D3748')
+        .attr('stroke', colors.textDark)
         .attr('stroke-width', 2)
         .attr('opacity', showEffect ? 1 : 0);
 
@@ -358,7 +359,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('dy', '0.35em')
         .attr('font-size', '11px')
         .attr('font-weight', '600')
-        .attr('fill', '#2D3748')
+        .attr('fill', colors.textDark)
         .attr('opacity', showEffect ? 1 : 0)
         .text(showEffect ? formatEffect() : '');
     }
@@ -376,7 +377,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
       .attr('cx', d => xScale(d.x))
       .attr('cy', d => yScale(d.y))
       .attr('r', 5)
-      .attr('fill', d => d.isInside ? '#e74c3c' : '#718096')
+      .attr('fill', d => d.isInside ? colors.mita : colors.nonmita)
       .attr('opacity', 0)
       .on('mouseenter', (event, d) => {
         const rect = svgRef.current?.getBoundingClientRect();
@@ -440,7 +441,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
           <div><strong>District {tooltip.data.ubigeo}</strong></div>
           <div>Distance: {tooltip.data.distance.toFixed(1)} km</div>
           <div>{outcomeLabels[outcome]}: {outcome === 'stunting' ? `${tooltip.data.value.toFixed(1)}%` : tooltip.data.value.toFixed(2)}</div>
-          <div style={{ color: tooltip.data.isInside ? '#e74c3c' : '#718096' }}>
+          <div style={{ color: tooltip.data.isInside ? colors.mita : colors.nonmita }}>
             {tooltip.data.isInside ? 'Mita district' : 'Non-mita district'}
           </div>
         </div>

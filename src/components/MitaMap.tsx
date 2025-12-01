@@ -4,6 +4,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import districtPolygons from '../data/districtPolygons.json';
 import mitaData from '../data/mitaData.json';
+import { colors } from '../colors';
 
 // Fix for default marker icons in React-Leaflet
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -140,8 +141,8 @@ const MitaMap: React.FC<MitaMapProps> = ({ showDistricts = true }) => {
                 key={`nonmita-${index}`}
                 positions={polygon}
                 pathOptions={{
-                  color: '#718096',
-                  fillColor: '#A0AEC0',
+                  color: colors.nonmita,
+                  fillColor: colors.nonmitaLight,
                   fillOpacity: 0.4,
                   weight: 0,
                 }}
@@ -153,8 +154,8 @@ const MitaMap: React.FC<MitaMapProps> = ({ showDistricts = true }) => {
                 key={`mita-${index}`}
                 positions={polygon}
                 pathOptions={{
-                  color: '#c0392b',
-                  fillColor: '#e74c3c',
+                  color: colors.mitaDark,
+                  fillColor: colors.mita,
                   fillOpacity: 0.6,
                   weight: 0,
                 }}
@@ -173,8 +174,8 @@ const MitaMap: React.FC<MitaMapProps> = ({ showDistricts = true }) => {
               key={index}
               positions={d.polygon}
               pathOptions={{
-                color: isMita ? '#c0392b' : '#718096',
-                fillColor: isMita ? '#e74c3c' : '#A0AEC0',
+                color: isMita ? colors.mitaDark : colors.nonmita,
+                fillColor: isMita ? colors.mita : colors.nonmitaLight,
                 fillOpacity: 0.5,
                 weight: 1,
               }}
@@ -182,7 +183,7 @@ const MitaMap: React.FC<MitaMapProps> = ({ showDistricts = true }) => {
               <Popup>
                 <strong>District {d.ubigeo || 'Unknown'}</strong>
                 <br />
-                <span style={{ color: isMita ? '#e74c3c' : '#718096', fontWeight: 'bold' }}>
+                <span style={{ color: isMita ? colors.mita : colors.nonmita, fontWeight: 'bold' }}>
                   {isMita ? 'Mita district' : 'Non-mita district'}
                 </span>
                 {data && (

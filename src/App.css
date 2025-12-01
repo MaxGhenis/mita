@@ -1,7 +1,21 @@
 /* Design system - using mita red as accent */
 :root {
-  --accent: #c0392b;
-  --accent-dark: #a33025;
+  /* Mita (treatment) colors */
+  --mita: #e74c3c;
+  --mita-dark: #c0392b;
+  --mita-darker: #a33025;
+
+  /* Non-mita (control) colors */
+  --nonmita: #718096;
+  --nonmita-light: #A0AEC0;
+
+  /* Text and background */
+  --text-dark: #2D3748;
+  --grid-line: #e0e0e0;
+
+  /* Legacy aliases */
+  --accent: var(--mita-dark);
+  --accent-dark: var(--mita-darker);
   --black: 15, 18, 25;
   --gray: 96, 115, 159;
   --gray-light: 229, 233, 240;
@@ -129,12 +143,12 @@ h1, h2, h3, h4, h5, h6 {
 
 .legend-color.mita-region {
   background: rgba(231, 76, 60, 0.5);
-  border: 2px solid #c0392b;
+  border: 2px solid var(--mita-dark);
 }
 
 .legend-color.outside-region {
   background: rgba(160, 174, 192, 0.5);
-  border: 2px solid #718096;
+  border: 2px solid var(--nonmita);
 }
 
 .map-annotation {
@@ -142,7 +156,7 @@ h1, h2, h3, h4, h5, h6 {
   padding: 1rem;
   background: rgb(var(--gray-light));
   border-radius: 4px;
-  border-left: 4px solid #c0392b;
+  border-left: 4px solid var(--mita-dark);
 }
 
 .map-annotation p {
