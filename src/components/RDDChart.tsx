@@ -421,7 +421,7 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
         .attr('opacity', showOLS ? 1 : 0);
     }
 
-    // Show treatment effect brace only in 'effect' phase
+    // Show treatment effect highlight only in 'naive-effect' or 'effect' phase
     const showEffect = phase === 'naive-effect' || phase === 'effect';
 
     // Get the y positions at x=0 for both lines (the intercepts)
@@ -432,32 +432,16 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
     if (insideY0 !== undefined && outsideY0 !== undefined) {
       const y1 = yScale(insideY0);
       const y2 = yScale(outsideY0);
-      const xPos = xScale(0) + 5; // Position brace on RIGHT side of boundary (mita side)
-      const braceWidth = 8;
+      const xPos = xScale(0);
 
-      // Create curly brace path - opens to the RIGHT (toward mita region)
-      const createBracePath = (x: number, yTop: number, yBottom: number, width: number) => {
-        const midY = (yTop + yBottom) / 2;
-        const height = Math.abs(yBottom - yTop);
-        const curveSize = Math.min(height * 0.12, 6);
-
-        // Brace opens rightward
-        return `M ${x} ${yTop}
-                Q ${x + width} ${yTop}, ${x + width} ${yTop + curveSize * 2}
-                L ${x + width} ${midY - curveSize}
-                Q ${x + width} ${midY}, ${x + width * 1.8} ${midY}
-                Q ${x + width} ${midY}, ${x + width} ${midY + curveSize}
-                L ${x + width} ${yBottom - curveSize * 2}
-                Q ${x + width} ${yBottom}, ${x} ${yBottom}`;
-      };
-
+      // Highlight the gap on the boundary line (vertical segment between intercepts)
       g.select('.treatment-brace')
         .transition()
         .duration(500)
-        .attr('d', createBracePath(xPos, Math.min(y1, y2), Math.max(y1, y2), braceWidth))
+        .attr('d', `M ${xPos} ${y1} L ${xPos} ${y2}`)
         .attr('fill', 'none')
-        .attr('stroke', colors.textDark)
-        .attr('stroke-width', 2)
+        .attr('stroke', colors.mitaDark)
+        .attr('stroke-width', 4)
         .attr('opacity', showEffect ? 1 : 0);
 
       // Format treatment effect label (mita effect = inside - outside)
@@ -476,8 +460,8 @@ const RDDChart: React.FC<RDDChartProps> = ({ outcome, phase = 'effect' }) => {
       const labelPadding = { x: 10, y: 6 };
       const labelWidth = labelText.length * 10 + labelPadding.x * 2;
       const labelHeight = 28;
-      // Position label to the RIGHT of the brace
-      const labelX = xPos + braceWidth * 2;
+      // Position label to the RIGHT of the gap highlight
+      const labelX = xPos + 12;
       const labelY = (y1 + y2) / 2;
 
       // Background box for label - solid white background
