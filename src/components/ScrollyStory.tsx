@@ -64,8 +64,8 @@ const steps: StepData[] = [
   },
   {
     id: 'naive-effect',
-    title: 'A first estimate',
-    text: 'Our simple regression shows a gap at the boundary. But this naive estimate doesn\'t account for geography, elevation, or other factors that might also vary at the boundary.',
+    title: 'A misleading result',
+    text: 'Our simple regression suggests mita districts have less stunting—the opposite of what we\'d expect from forced labor! This counterintuitive result shows why we can\'t trust naive comparisons. Geography, elevation, and other factors confound the relationship.',
     visual: 'rdd-stunting',
     rddPhase: 'naive-effect',
   },
@@ -79,7 +79,7 @@ const steps: StepData[] = [
   {
     id: 'consumption',
     title: 'Finding #2: Lower consumption',
-    text: 'The same pattern appears for household consumption. Mita districts have about 25% lower consumption today—a coefficient of -0.25 log points. The persistent poverty reflects centuries of institutional disadvantage.',
+    text: 'The same pattern appears for household consumption. Mita districts have about 22% lower consumption today—a coefficient of -0.25 log points. The persistent poverty reflects centuries of institutional disadvantage.',
     visual: 'rdd-consumption',
     rddPhase: 'effect',
   },
