@@ -257,7 +257,7 @@ const renderOLSLines = (
     return d3.interpolateString(oldPath, newPath);
   };
 
-  // Inside line
+  // Inside line (mita side - right side of scatter)
   svg.selectAll<SVGPathElement, typeof insideLine>('.inside-line')
     .data([insideLine])
     .join(
@@ -265,7 +265,7 @@ const renderOLSLines = (
         .attr('class', 'inside-line')
         .attr('transform', `translate(${margin.left},${margin.top})`)
         .attr('fill', 'none')
-        .attr('stroke', colors.textLight)
+        .attr('stroke', colors.mita)
         .attr('stroke-width', 3)
         .attr('d', lineGenerator)
         .attr('opacity', animate ? 0 : 1)
@@ -280,7 +280,7 @@ const renderOLSLines = (
       }
     );
 
-  // Outside line
+  // Outside line (non-mita side - left side of scatter)
   svg.selectAll<SVGPathElement, typeof outsideLine>('.outside-line')
     .data([outsideLine])
     .join(
@@ -288,7 +288,7 @@ const renderOLSLines = (
         .attr('class', 'outside-line')
         .attr('transform', `translate(${margin.left},${margin.top})`)
         .attr('fill', 'none')
-        .attr('stroke', colors.nonmita)
+        .attr('stroke', colors.nonmitaLight)
         .attr('stroke-width', 3)
         .attr('d', lineGenerator)
         .attr('opacity', animate ? 0 : 1)
