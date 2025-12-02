@@ -46,6 +46,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
   const [dimensions] = useState(DEFAULT_DIMENSIONS);
   const animationRef = useRef<number | null>(null);
   const zoomAnimationRef = useRef<number | null>(null);
+  const borderAnimationRef = useRef<number | null>(null);
   const [currentProgress, setCurrentProgress] = useState(morphProgress);
   const [currentOutcome, setCurrentOutcome] = useState<OutcomeType>(outcome);
   const [currentZoom, setCurrentZoom] = useState(zoomLevel === 'peru' ? 0 : 1);
@@ -122,7 +123,30 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
   }, [zoomLevel]);
 
   useEffect(() => {
-    setBorderOpacity(showDistricts ? 1 : 0);
+    const targetOpacity = showDistricts ? 1 : 0;
+    let startOpacity = borderOpacity;
+    const duration = 400; // Fade duration in ms
+    const startTime = performance.now();
+
+    const animate = (time: number) => {
+      const elapsed = time - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      const newOpacity = startOpacity + (targetOpacity - startOpacity) * eased;
+      setBorderOpacity(newOpacity);
+
+      if (t < 1) {
+        borderAnimationRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    if (borderAnimationRef.current) cancelAnimationFrame(borderAnimationRef.current);
+    borderAnimationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (borderAnimationRef.current) cancelAnimationFrame(borderAnimationRef.current);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showDistricts]);
 
   // Computed data

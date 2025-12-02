@@ -27,7 +27,7 @@ export const DEFAULT_MARGIN = {
 
 // Animation durations (ms)
 export const ANIMATION = {
-  morphDuration: 3000,
+  morphDuration: 4500,
   zoomDuration: 1500,
   transitionDuration: 600,
   effectDelay: 300,
