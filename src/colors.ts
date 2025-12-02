@@ -55,8 +55,8 @@ export const colors = {
   // Mita (treatment) colors - used for mita region fill on map AND scatter
   mita: '#222939',           // Dark slate - main mita fill
   mitaDark: '#2D3748',       // Slightly lighter dark for accents
-  mitaStroke: '#1A202C',     // Darker stroke for mita regions
-  mitaDarker: '#1A202C',     // Alias for mitaStroke (backwards compat)
+  mitaStroke: '#4A5568',     // Lighter stroke for visible borders on dark mita fill
+  mitaDarker: '#1A202C',     // Darker shade for other uses
   mitaLabel: '#E2E8F0',      // Light text for labels on dark mita background
 
   // Non-mita (control) colors - gray works with any mita palette

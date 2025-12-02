@@ -80,9 +80,11 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
   const [dimensions] = useState({ width: 700, height: 500 });
   const animationRef = useRef<number | null>(null);
   const zoomAnimationRef = useRef<number | null>(null);
+  const borderAnimationRef = useRef<number | null>(null);
   const [currentProgress, setCurrentProgress] = useState(morphProgress);
   const [currentOutcome, setCurrentOutcome] = useState(outcome);
   const [currentZoom, setCurrentZoom] = useState(zoomLevel === 'peru' ? 0 : 1); // 0 = peru, 1 = mita
+  const [borderOpacity, setBorderOpacity] = useState(showDistricts ? 1 : 0);
   const prevScatterPhaseRef = useRef<string>(scatterPhase);
   const prevOutcomeRef = useRef<string>(outcome);
 
@@ -156,6 +158,11 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoomLevel]);
+
+  // Update border opacity immediately when showDistricts changes
+  useEffect(() => {
+    setBorderOpacity(showDistricts ? 1 : 0);
+  }, [showDistricts]);
 
   // Filter data for scatter plot - include all outcome values for smooth transitions
   const scatterData = useMemo(() => {
@@ -414,45 +421,48 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
     const yScale = yScales[currentOutcome];
 
     // Background regions - fade in
+    // Colors match the opposite side's map/dot color (with same 0.85 opacity as map)
     if (t > 0) {
-      const bgOpacity = t * 0.3;
-
+      // Left side (non-mita region) - matches mita map color
       g.append('rect')
         .attr('x', xScale(-50))
         .attr('width', xScale(0) - xScale(-50))
         .attr('y', 0)
         .attr('height', innerHeight)
-        .attr('fill', colors.nonmitaLight)
-        .attr('opacity', bgOpacity);
+        .attr('fill', colors.mita)
+        .attr('opacity', t * 0.85);
 
+      // Right side (mita region) - matches non-mita map color
       g.append('rect')
         .attr('x', xScale(0))
         .attr('width', xScale(50) - xScale(0))
         .attr('y', 0)
         .attr('height', innerHeight)
-        .attr('fill', colors.mita)
-        .attr('opacity', t);
+        .attr('fill', colors.nonmitaLight)
+        .attr('opacity', t * 0.85);
     }
 
-    // Region labels
+    // Region labels - colors match their respective dot colors
     if (t > 0.7) {
       const labelOpacity = (t - 0.7) / 0.3;
 
+      // Non-mita label - same color as non-mita dots
       g.append('text')
         .attr('x', xScale(-25))
         .attr('y', 20)
         .attr('text-anchor', 'middle')
-        .attr('fill', colors.nonmita)
+        .attr('fill', colors.nonmitaLight)
         .attr('font-size', '13px')
         .attr('font-weight', '600')
         .attr('opacity', labelOpacity)
         .text('Non-mita');
 
+      // Mita label - same color as mita dots
       g.append('text')
         .attr('x', xScale(25))
         .attr('y', 20)
         .attr('text-anchor', 'middle')
-        .attr('fill', colors.mitaLabel)
+        .attr('fill', colors.mita)
         .attr('font-size', '13px')
         .attr('font-weight', '600')
         .attr('opacity', labelOpacity)
@@ -552,8 +562,8 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
       const sortedData = [...mergedData].sort((a, b) => a.mita - b.mita);
 
       // When zoomed out, non-mita districts should be invisible (Peru outline shows instead)
-      // When zoomed in, non-mita districts should be visible
-      const nonMitaOpacity = z * 0.5 * polygonOpacity;
+      // When zoomed in, non-mita districts should be visible with same opacity as mita
+      const nonMitaOpacity = z * 0.85 * polygonOpacity;
 
       if (!showDistricts) {
         // When not showing districts, draw a background layer first
@@ -588,14 +598,15 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
           return pathGenerator(geoJSON);
         })
         .attr('fill', d => d.mita === 1 ? colors.mita : colors.nonmitaLight)
-        .attr('stroke', showDistricts ? (d => d.mita === 1 ? colors.mitaStroke : colors.nonmita) : 'none')
-        .attr('stroke-width', showDistricts ? 1 : 0)
+        .attr('stroke', d => d.mita === 1 ? colors.mitaStroke : colors.nonmita)
+        .attr('stroke-width', 1)
+        .attr('stroke-opacity', borderOpacity)
         .attr('opacity', d => d.mita === 1 ? 0.85 * polygonOpacity : nonMitaOpacity);
 
     } else {
       // Morphing/scatter phase
-      // morphT goes from 0 to 1 as t goes from 0.3 to 0.8
-      const morphT = Math.min((t - 0.3) / 0.5, 1);
+      // morphT goes from 0 to 1 as t goes from 0.2 to 0.9 (slower transition)
+      const morphT = Math.min((t - 0.2) / 0.7, 1);
 
       // Apply easing to morphT for smoother animation
       const easedMorphT = morphT < 0.5
@@ -648,8 +659,6 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
               .attr('r', 5)
               .attr('fill', d => d.isInside ? colors.mita : colors.nonmitaLight)
               .attr('opacity', 0)
-              .attr('stroke', d => d.isInside ? colors.mitaStroke : colors.white)
-              .attr('stroke-width', 0.5)
               .call(enter => enter.transition().duration(600).attr('opacity', d => getOutcomeY(d, currentOutcome) !== null ? 0.8 : 0)),
             update => update
               .call(update => update.transition().duration(600)
@@ -773,9 +782,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
             })
             .attr('r', dotRadius)
             .attr('fill', d => d.isInside ? colors.mita : colors.nonmitaLight)
-            .attr('opacity', dotOpacity * 0.8)
-            .attr('stroke', d => d.isInside ? colors.mitaStroke : colors.white)
-            .attr('stroke-width', 0.5);
+            .attr('opacity', dotOpacity * 0.8);
         }
       } else {
         // Full scatter - just show dots
@@ -792,9 +799,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
           .attr('cy', d => yScale(d.scatterY))
           .attr('r', 5)
           .attr('fill', d => d.isInside ? colors.mita : colors.nonmitaLight)
-          .attr('opacity', 0.8)
-          .attr('stroke', d => d.isInside ? colors.mitaStroke : colors.white)
-          .attr('stroke-width', 0.5);
+          .attr('opacity', 0.8);
       }
     }
 
@@ -1014,7 +1019,6 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
   // Dynamic title
   const getTitle = () => {
     if (currentProgress < 0.3) return 'The mita boundary';
-    if (currentProgress < 0.8) return 'Districts become data points...';
     return outcomeLabels[currentOutcome];
   };
 
