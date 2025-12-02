@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import { geoMercator, geoPath } from 'd3-geo';
 import districtPolygons from '../data/districtPolygons.json';
 import mitaData from '../data/mitaData.json';
+import peruOutline from '../data/peruOutline.json';
 import { colors } from '../colors';
 
 interface UnifiedVizProps {
@@ -10,6 +11,7 @@ interface UnifiedVizProps {
   outcome: 'consumption' | 'stunting' | 'roads';
   showDistricts: boolean;
   scatterPhase: 'dots' | 'ols' | 'naive-effect' | 'effect';
+  zoomLevel: 'peru' | 'mita'; // 'peru' shows whole country, 'mita' zooms to mita region
 }
 
 interface DistrictPolygon {
@@ -71,13 +73,16 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
   morphProgress,
   outcome,
   showDistricts,
-  scatterPhase
+  scatterPhase,
+  zoomLevel
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions] = useState({ width: 700, height: 500 });
   const animationRef = useRef<number | null>(null);
+  const zoomAnimationRef = useRef<number | null>(null);
   const [currentProgress, setCurrentProgress] = useState(morphProgress);
   const [currentOutcome, setCurrentOutcome] = useState(outcome);
+  const [currentZoom, setCurrentZoom] = useState(zoomLevel === 'peru' ? 0 : 1); // 0 = peru, 1 = mita
   const prevScatterPhaseRef = useRef<string>(scatterPhase);
   const prevOutcomeRef = useRef<string>(outcome);
 
@@ -119,6 +124,38 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
   useEffect(() => {
     setCurrentOutcome(outcome);
   }, [outcome]);
+
+  // Smooth zoom animation
+  useEffect(() => {
+    const targetZoom = zoomLevel === 'peru' ? 0 : 1;
+    let startZoom = currentZoom;
+    const duration = 1500;
+    const startTime = performance.now();
+
+    const animate = (time: number) => {
+      const elapsed = time - startTime;
+      const t = Math.min(elapsed / duration, 1);
+      const eased = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+      const newZoom = startZoom + (targetZoom - startZoom) * eased;
+      setCurrentZoom(newZoom);
+
+      if (t < 1) {
+        zoomAnimationRef.current = requestAnimationFrame(animate);
+      }
+    };
+
+    if (zoomAnimationRef.current) {
+      cancelAnimationFrame(zoomAnimationRef.current);
+    }
+    zoomAnimationRef.current = requestAnimationFrame(animate);
+
+    return () => {
+      if (zoomAnimationRef.current) {
+        cancelAnimationFrame(zoomAnimationRef.current);
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [zoomLevel]);
 
   // Filter data for scatter plot - include all outcome values for smooth transitions
   const scatterData = useMemo(() => {
@@ -309,17 +346,51 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
       g.selectAll('*').remove();
     }
 
-    // Geo projection
+    // Geo projection - interpolate between Peru view and mita view
     const allCoords: [number, number][] = [];
     mergedData.forEach(d => {
       d.polygon.forEach(p => allCoords.push([p[1], p[0]]));
     });
 
-    const projection = geoMercator()
+    // Peru outline coordinates
+    const peruCoords = (peruOutline as any).geometry.coordinates[0] as [number, number][];
+
+    // Create projections for both zoom levels
+    const mitaProjection = geoMercator()
       .fitSize([innerWidth, innerHeight], {
         type: 'MultiPoint',
         coordinates: allCoords
       });
+
+    const peruProjection = geoMercator()
+      .fitSize([innerWidth, innerHeight], {
+        type: 'Polygon',
+        coordinates: [peruCoords]
+      });
+
+    // Interpolate projection parameters based on zoom level
+    const mitaCenter = mitaProjection.center();
+    const peruCenter = peruProjection.center();
+    const mitaScale = mitaProjection.scale();
+    const peruScale = peruProjection.scale();
+    const mitaTranslate = mitaProjection.translate();
+    const peruTranslate = peruProjection.translate();
+
+    const z = currentZoom; // 0 = peru, 1 = mita
+    const interpolatedCenter: [number, number] = [
+      peruCenter![0] + (mitaCenter![0] - peruCenter![0]) * z,
+      peruCenter![1] + (mitaCenter![1] - peruCenter![1]) * z
+    ];
+    const interpolatedScale = peruScale + (mitaScale - peruScale) * z;
+    const interpolatedTranslate: [number, number] = [
+      peruTranslate[0] + (mitaTranslate[0] - peruTranslate[0]) * z,
+      peruTranslate[1] + (mitaTranslate[1] - peruTranslate[1]) * z
+    ];
+
+    const projection = geoMercator()
+      .center(interpolatedCenter)
+      .scale(interpolatedScale)
+      .translate(interpolatedTranslate);
 
     const pathGenerator = geoPath().projection(projection);
 
@@ -420,6 +491,19 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
     if (t < 0.3) {
       // Map phase - show ALL polygons
       const polygonOpacity = 1 - (t / 0.3) * 0.3;
+
+      // Draw Peru outline when zoomed out (z < 1)
+      if (z < 1) {
+        const peruOpacity = (1 - z) * 0.6;
+        g.append('path')
+          .datum(peruOutline as any)
+          .attr('class', 'peru-outline')
+          .attr('d', pathGenerator as any)
+          .attr('fill', '#f0f0f0')
+          .attr('stroke', '#999')
+          .attr('stroke-width', 1)
+          .attr('opacity', peruOpacity);
+      }
 
       // Draw non-mita first, then mita on top
       const sortedData = [...mergedData].sort((a, b) => a.mita - b.mita);
@@ -846,7 +930,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
     // Update outcome ref at the end
     prevOutcomeRef.current = currentOutcome;
 
-  }, [currentProgress, currentOutcome, scatterPhase, mergedData, scatterData, allScatterData, fittedLines, dimensions, showDistricts]);
+  }, [currentProgress, currentOutcome, scatterPhase, mergedData, scatterData, allScatterData, fittedLines, dimensions, showDistricts, currentZoom]);
 
   // Dynamic title
   const getTitle = () => {

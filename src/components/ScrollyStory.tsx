@@ -12,6 +12,7 @@ interface StepData {
   outcome: 'stunting' | 'consumption' | 'roads';
   showDistricts: boolean;
   scatterPhase: 'dots' | 'ols' | 'naive-effect' | 'effect';
+  zoomLevel: 'peru' | 'mita';
 }
 
 // All main content steps (between intro and conclusion)
@@ -24,6 +25,7 @@ const mainSteps: StepData[] = [
     outcome: 'stunting',
     showDistricts: false,
     scatterPhase: 'dots',
+    zoomLevel: 'peru',
   },
   {
     id: 'research-question',
@@ -33,6 +35,7 @@ const mainSteps: StepData[] = [
     outcome: 'stunting',
     showDistricts: false,
     scatterPhase: 'dots',
+    zoomLevel: 'mita',
   },
   {
     id: 'naive-comparison',
@@ -42,6 +45,7 @@ const mainSteps: StepData[] = [
     outcome: 'stunting',
     showDistricts: true,
     scatterPhase: 'dots',
+    zoomLevel: 'mita',
   },
   {
     id: 'boundary',
@@ -51,6 +55,7 @@ const mainSteps: StepData[] = [
     outcome: 'stunting',
     showDistricts: true,
     scatterPhase: 'dots',
+    zoomLevel: 'mita',
   },
   {
     id: 'transform',
@@ -60,6 +65,7 @@ const mainSteps: StepData[] = [
     outcome: 'stunting',
     showDistricts: true,
     scatterPhase: 'dots',
+    zoomLevel: 'mita',
   },
   {
     id: 'rdd-intro',
@@ -69,6 +75,7 @@ const mainSteps: StepData[] = [
     outcome: 'stunting',
     showDistricts: true,
     scatterPhase: 'dots',
+    zoomLevel: 'mita',
   },
   {
     id: 'rdd-ols',
@@ -78,6 +85,7 @@ const mainSteps: StepData[] = [
     outcome: 'stunting',
     showDistricts: true,
     scatterPhase: 'ols',
+    zoomLevel: 'mita',
   },
   {
     id: 'naive-effect',
@@ -87,6 +95,7 @@ const mainSteps: StepData[] = [
     outcome: 'stunting',
     showDistricts: true,
     scatterPhase: 'naive-effect',
+    zoomLevel: 'mita',
   },
   {
     id: 'stunting',
@@ -96,6 +105,7 @@ const mainSteps: StepData[] = [
     outcome: 'stunting',
     showDistricts: true,
     scatterPhase: 'effect',
+    zoomLevel: 'mita',
   },
   {
     id: 'consumption',
@@ -105,6 +115,7 @@ const mainSteps: StepData[] = [
     outcome: 'consumption',
     showDistricts: true,
     scatterPhase: 'effect',
+    zoomLevel: 'mita',
   },
   {
     id: 'roads',
@@ -114,6 +125,7 @@ const mainSteps: StepData[] = [
     outcome: 'roads',
     showDistricts: true,
     scatterPhase: 'effect',
+    zoomLevel: 'mita',
   },
   {
     id: 'mechanism',
@@ -123,6 +135,7 @@ const mainSteps: StepData[] = [
     outcome: 'roads',
     showDistricts: true,
     scatterPhase: 'effect',
+    zoomLevel: 'mita',
   },
 ];
 
@@ -170,6 +183,7 @@ const ScrollyStory: React.FC = () => {
               outcome={currentStep.outcome}
               showDistricts={currentStep.showDistricts}
               scatterPhase={currentStep.scatterPhase}
+              zoomLevel={currentStep.zoomLevel}
             />
           </div>
         </div>
