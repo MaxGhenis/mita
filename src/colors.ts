@@ -53,7 +53,7 @@ const MITA_PALETTE = {
 
 export const colors = {
   // Mita (treatment) colors - used for mita region fill on map AND scatter
-  mita: '#222939',           // Dark slate - main mita fill
+  mita: '#1A1F2E',           // Dark slate - main mita fill (darker to match map at 0.85 opacity)
   mitaDark: '#2D3748',       // Slightly lighter dark for accents
   mitaStroke: '#4A5568',     // Lighter stroke for visible borders on dark mita fill
   mitaDarker: '#1A202C',     // Darker shade for other uses
