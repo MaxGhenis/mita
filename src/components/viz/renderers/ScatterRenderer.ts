@@ -20,23 +20,23 @@ export const renderScatterBackgrounds = ({
 }: ScatterBackgroundParams): void => {
   if (t <= 0) return;
 
-  // Left side (non-mita region) - matches mita map color
+  // Left side (non-mita region) - background matches non-mita dot color
   g.append('rect')
     .attr('x', xScale(-50))
     .attr('width', xScale(0) - xScale(-50))
     .attr('y', 0)
     .attr('height', innerHeight)
-    .attr('fill', colors.mita)
-    .attr('opacity', t * OPACITY.district);
+    .attr('fill', colors.nonmitaLight)
+    .attr('opacity', t * OPACITY.district * 0.4);
 
-  // Right side (mita region) - matches non-mita map color
+  // Right side (mita region) - background matches mita dot color
   g.append('rect')
     .attr('x', xScale(0))
     .attr('width', xScale(50) - xScale(0))
     .attr('y', 0)
     .attr('height', innerHeight)
-    .attr('fill', colors.nonmitaLight)
-    .attr('opacity', t * OPACITY.district);
+    .attr('fill', colors.mita)
+    .attr('opacity', t * OPACITY.district * 0.4);
 };
 
 interface ScatterLabelsParams {
@@ -60,10 +60,12 @@ export const renderScatterLabels = ({
     .attr('y', 20)
     .attr('text-anchor', 'middle')
     .attr('fill', colors.nonmitaLight)
-    .attr('font-size', '13px')
-    .attr('font-weight', '600')
+    .attr('font-size', '11px')
+    .attr('font-weight', '500')
+    .attr('font-family', "'JetBrains Mono', monospace")
+    .attr('letter-spacing', '0.08em')
     .attr('opacity', labelOpacity)
-    .text('Non-mita');
+    .text('NON-MITA');
 
   // Mita label - same color as mita dots
   g.append('text')
@@ -71,10 +73,12 @@ export const renderScatterLabels = ({
     .attr('y', 20)
     .attr('text-anchor', 'middle')
     .attr('fill', colors.mita)
-    .attr('font-size', '13px')
-    .attr('font-weight', '600')
+    .attr('font-size', '11px')
+    .attr('font-weight', '500')
+    .attr('font-family', "'JetBrains Mono', monospace")
+    .attr('letter-spacing', '0.08em')
     .attr('opacity', labelOpacity)
-    .text('Mita');
+    .text('MITA');
 };
 
 interface ScatterAxesParams {
@@ -116,7 +120,8 @@ export const renderScatterAxes = ({
     .attr('y', innerHeight + 40)
     .attr('text-anchor', 'middle')
     .attr('fill', colors.textMuted)
-    .attr('font-size', '12px')
+    .attr('font-size', '11px')
+    .attr('font-family', "'JetBrains Mono', monospace")
     .attr('opacity', axisOpacity)
     .text('Distance from mita boundary (km)');
 };
@@ -333,7 +338,7 @@ const renderEffectAnnotation = (
         .attr('x2', xPos)
         .attr('y1', d => d[0])
         .attr('y2', d => d[1])
-        .attr('stroke', colors.effectLine)
+        .attr('stroke', colors.terracotta)
         .attr('stroke-width', 4)
         .attr('opacity', animate ? 0 : 1)
         .call(enter => animate ? enter.transition().duration(500).delay(300).attr('opacity', 1) : enter),
@@ -358,20 +363,20 @@ const renderEffectAnnotation = (
         .attr('transform', `translate(${margin.left},${margin.top})`)
         .attr('x', labelX - 10)
         .attr('y', d => d - 14)
-        .attr('width', labelText.length * 10 + 20)
+        .attr('width', labelText.length * 9 + 20)
         .attr('height', 28)
-        .attr('rx', 4)
-        .attr('fill', colors.mitaDarker)
-        .attr('stroke', colors.textLight)
-        .attr('stroke-width', 2)
+        .attr('rx', 3)
+        .attr('fill', colors.terracotta)
+        .attr('stroke', colors.parchment)
+        .attr('stroke-width', 1)
         .attr('opacity', animate ? 0 : 1)
         .call(enter => animate ? enter.transition().duration(500).delay(400).attr('opacity', 1) : enter),
       update => update
         .call(update => shouldPreserveElements
           ? update.transition().duration(600)
               .attr('y', d => d - 14)
-              .attr('width', labelText.length * 10 + 20)
-          : update.attr('y', d => d - 14).attr('width', labelText.length * 10 + 20))
+              .attr('width', labelText.length * 9 + 20)
+          : update.attr('y', d => d - 14).attr('width', labelText.length * 9 + 20))
     );
 
   // Label text
@@ -384,8 +389,9 @@ const renderEffectAnnotation = (
         .attr('x', labelX)
         .attr('y', d => d)
         .attr('dy', '0.35em')
-        .attr('font-size', '14px')
-        .attr('font-weight', '700')
+        .attr('font-size', '13px')
+        .attr('font-weight', '600')
+        .attr('font-family', "'JetBrains Mono', monospace")
         .attr('fill', colors.effectLine)
         .text(labelText)
         .attr('opacity', animate ? 0 : 1)

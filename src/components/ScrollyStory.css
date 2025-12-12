@@ -1,190 +1,281 @@
+/* =============================================================================
+   SCROLLY STORY STYLES
+   Editorial scrollytelling with mining rock + colonial archive aesthetics
+   ============================================================================= */
+
 .scrolly-container {
   position: relative;
   width: 100%;
 }
 
-/* Progress bar */
+/* -----------------------------------------------------------------------------
+   PROGRESS INDICATOR - Elegant horizontal line
+   ----------------------------------------------------------------------------- */
 .progress-bar {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
-  height: 4px;
-  background: rgba(var(--gray-light), 0.5);
+  height: 3px;
+  background: transparent;
   z-index: 1000;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), var(--accent-dark));
-  transition: width 0.3s ease;
+  background: linear-gradient(90deg, var(--terracotta) 0%, var(--ochre) 100%);
+  transition: width 0.4s var(--ease-out-expo);
+  box-shadow: 0 0 12px var(--terracotta);
 }
 
-/* Each section contains a sticky graphic and scrolling text */
+/* -----------------------------------------------------------------------------
+   INTRO SECTION - Full-bleed dramatic opening
+   ----------------------------------------------------------------------------- */
+.intro-section {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.intro-visual {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+
+  /* Deep mining rock gradient with texture */
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(54, 61, 77, 0.4) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 80%, rgba(42, 157, 143, 0.15) 0%, transparent 40%),
+    linear-gradient(165deg, var(--rock-deepest) 0%, var(--rock-deep) 40%, var(--rock-dark) 100%);
+  color: var(--text-inverse);
+  text-align: center;
+}
+
+/* Topographic line pattern overlay */
+.intro-visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 30 Q15 25 30 30 T60 30' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.04'/%3E%3Cpath d='M0 45 Q15 40 30 45 T60 45' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.03'/%3E%3Cpath d='M0 15 Q15 10 30 15 T60 15' fill='none' stroke='%23ffffff' stroke-width='0.5' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.intro-content {
+  padding: var(--space-xl);
+  max-width: 700px;
+  position: relative;
+  z-index: 1;
+}
+
+.intro-content h1 {
+  font-family: var(--font-display);
+  font-size: clamp(3rem, 10vw, 6rem);
+  font-weight: 700;
+  margin: 0 0 var(--space-lg) 0;
+  color: var(--parchment);
+  letter-spacing: -0.03em;
+  line-height: 0.95;
+  text-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Decorative line above title */
+.intro-content h1::before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 3px;
+  background: var(--terracotta);
+  margin: 0 auto var(--space-lg);
+}
+
+.intro-subtitle {
+  font-family: var(--font-body);
+  font-size: clamp(1.1rem, 3vw, 1.5rem);
+  font-weight: 400;
+  font-style: italic;
+  opacity: 0.9;
+  margin: 0 0 var(--space-xl) 0;
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.5;
+}
+
+.intro-citation {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  opacity: 0.7;
+  margin: 0 0 var(--space-sm) 0;
+}
+
+.intro-citation a {
+  color: var(--ochre-light);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.intro-citation a:hover {
+  color: var(--ochre);
+}
+
+.intro-author {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  opacity: 0.5;
+  margin: 0 0 var(--space-2xl) 0;
+}
+
+.intro-author a {
+  color: var(--parchment);
+}
+
+.scroll-hint {
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  opacity: 0.5;
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.5;
+  }
+  50% {
+    transform: translateY(-8px);
+    opacity: 0.7;
+  }
+}
+
+/* -----------------------------------------------------------------------------
+   MAIN SCROLLY SECTION
+   ----------------------------------------------------------------------------- */
 .scrolly-section {
   position: relative;
   display: flex;
   min-height: 100vh;
 }
 
-/* Sticky graphic - sticks to the left/center while text scrolls */
+.main-section {
+  min-height: 200vh;
+}
+
+/* Sticky visualization panel */
 .sticky-graphic {
   position: sticky;
   top: 0;
-  width: 60%;
+  width: 58%;
   height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgb(var(--gray-light));
+  background: var(--parchment-dark);
+
+  /* Subtle border on right edge */
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, 0.06);
 }
 
 .graphic-container {
   width: 100%;
-  max-width: 800px;
-  padding: 1rem;
-  background: white;
-  border-radius: 8px;
-  box-shadow: var(--box-shadow);
-  margin: 1rem;
+  max-width: 750px;
+  padding: var(--space-lg);
+  background: var(--parchment-cream);
+  border-radius: 4px;
+  box-shadow: var(--shadow-lg);
+  margin: var(--space-lg);
+
+  /* Subtle paper edge effect */
+  border: 1px solid rgba(0, 0, 0, 0.04);
 }
 
-/* Scrolling text container */
+/* Scrolling narrative panel */
 .scrolly-text {
-  width: 40%;
-  padding: 0 2rem;
+  width: 42%;
+  padding: 0 var(--space-xl);
   display: flex;
   flex-direction: column;
 }
 
-/* Individual narrative steps */
+/* -----------------------------------------------------------------------------
+   NARRATIVE STEPS
+   ----------------------------------------------------------------------------- */
 .narrative-step {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 2rem 0;
+  padding: var(--space-xl) 0;
 }
 
 .narrative-step > * {
-  background: rgba(255, 255, 255, 0.98);
-  padding: 2rem;
-  border-radius: 8px;
-  box-shadow: 0 4px 20px rgba(var(--gray), 0.2);
-  max-width: 400px;
-  transition: all 0.3s ease;
+  background: var(--parchment-cream);
+  padding: var(--space-xl) var(--space-lg);
+  border-radius: 4px;
+  box-shadow: var(--shadow-md);
+  max-width: 380px;
+  transition: all 0.5s var(--ease-out-expo);
+  border: 1px solid transparent;
+  position: relative;
 }
 
 .narrative-step h2 {
-  margin: 0 0 1rem 0;
-  font-size: 1.4rem;
-  color: rgb(var(--gray-dark));
-  line-height: 1.3;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  margin: 0 0 var(--space-md) 0;
+  color: var(--rock-deepest);
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 .narrative-step p {
+  font-family: var(--font-body);
   margin: 0;
   font-size: 1.05rem;
-  line-height: 1.7;
-  color: rgb(var(--gray));
+  line-height: 1.75;
+  color: var(--text-body);
 }
 
+/* Active step styling */
 .narrative-step.active > * {
-  box-shadow: 0 2px 15px rgba(192, 57, 43, 0.08);
-  border-left: 4px solid var(--accent);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--terracotta);
+  border-left-width: 4px;
 }
 
-/* Intro section - full screen, scrolls away */
-.intro-section {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.narrative-step.active h2 {
+  color: var(--terracotta-dark);
 }
 
-.intro-visual {
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, rgb(var(--gray-dark)) 0%, rgb(var(--black)) 100%);
-  color: white;
-  text-align: center;
+/* Step number indicator */
+.narrative-step.active > *::before {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 50%;
+  transform: translateY(-50%) translateX(-100%);
+  width: 8px;
+  height: 8px;
+  background: var(--terracotta);
+  border-radius: 50%;
+  margin-left: -12px;
 }
 
-.intro-content {
-  padding: 2rem;
-}
-
-.intro-content h1 {
-  font-size: 3rem;
-  margin: 0 0 1rem 0;
-  font-weight: 700;
-  color: white;
-}
-
-.intro-subtitle {
-  font-size: 1.4rem;
-  opacity: 0.9;
-  margin: 0 0 1.5rem 0;
-  max-width: 500px;
-}
-
-.intro-citation {
-  font-size: 1rem;
-  opacity: 0.8;
-  margin: 0 0 0.5rem 0;
-}
-
-.intro-citation a {
-  color: white;
-  text-decoration: underline;
-}
-
-.intro-citation a:hover {
-  opacity: 0.9;
-}
-
-.intro-author {
-  font-size: 0.95rem;
-  opacity: 0.7;
-  margin: 0 0 2rem 0;
-}
-
-.intro-author a {
-  color: white;
-  text-decoration: underline;
-}
-
-.intro-author a:hover {
-  opacity: 0.9;
-}
-
-.scroll-hint {
-  font-size: 1.2rem;
-  opacity: 0.6;
-  animation: bounce 2s infinite;
-}
-
-@keyframes bounce {
-  0%, 20%, 50%, 80%, 100% {
-    transform: translateY(0);
-  }
-  40% {
-    transform: translateY(-10px);
-  }
-  60% {
-    transform: translateY(-5px);
-  }
-}
-
-/* Main section - single sticky with all scrolly content */
-.main-section {
-  min-height: 200vh; /* Allow enough scroll space */
-}
-
-/* Conclusion section - full screen, scrolls in */
+/* -----------------------------------------------------------------------------
+   CONCLUSION SECTION
+   ----------------------------------------------------------------------------- */
 .conclusion-section {
   min-height: 100vh;
   display: flex;
@@ -194,126 +285,178 @@
 
 .conclusion-visual {
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
-  color: white;
+  position: relative;
+
+  /* Terracotta gradient - representing extracted earth/labor */
+  background:
+    radial-gradient(ellipse at 20% 80%, rgba(212, 163, 115, 0.2) 0%, transparent 50%),
+    linear-gradient(165deg, var(--terracotta-dark) 0%, var(--terracotta) 50%, var(--terracotta-dark) 100%);
+  color: var(--parchment);
   text-align: center;
 }
 
+/* Texture overlay */
+.conclusion-visual::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
 .conclusion-content {
-  padding: 2rem;
-  max-width: 600px;
+  padding: var(--space-xl);
+  max-width: 650px;
+  position: relative;
+  z-index: 1;
+}
+
+.conclusion-content h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 6vw, 3rem);
+  font-weight: 700;
+  margin: 0 0 var(--space-lg) 0;
+  color: var(--parchment);
+  letter-spacing: -0.02em;
+  line-height: 1.1;
 }
 
 .conclusion-summary {
+  font-family: var(--font-body);
   font-size: 1.2rem;
   line-height: 1.6;
-  margin-bottom: 2rem;
+  margin-bottom: var(--space-xl);
   opacity: 0.95;
 }
 
 .key-findings {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 8px;
-  padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 4px;
+  padding: var(--space-lg);
+  margin-bottom: var(--space-lg);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(4px);
 }
 
 .key-findings h3 {
-  margin: 0 0 1rem 0;
-  font-size: 1.1rem;
-  opacity: 1;
-  color: white;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0 0 var(--space-md) 0;
+  opacity: 0.8;
+  color: var(--parchment);
 }
 
 .key-findings ul {
+  list-style: none;
   margin: 0;
+  padding: 0;
 }
 
 .key-findings li {
-  color: white;
-  font-size: 1.2rem;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--parchment);
+  margin: var(--space-sm) 0;
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-sm);
 }
 
-.conclusion-content h2 {
-  font-size: 2.2rem;
-  margin: 0 0 1.5rem 0;
-  color: white;
-}
-
-.conclusion-content ul {
-  list-style: none;
-  padding: 0;
-  margin: 0 0 1.5rem 0;
-}
-
-.conclusion-content li {
-  font-size: 1.3rem;
-  margin: 0.8rem 0;
+.key-findings li strong {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  color: var(--ochre-light);
 }
 
 .conclusion-note {
+  font-family: var(--font-body);
   font-size: 1.1rem;
-  opacity: 0.9;
   font-style: italic;
+  opacity: 0.85;
 }
 
-/* Footer */
+/* -----------------------------------------------------------------------------
+   FOOTER
+   ----------------------------------------------------------------------------- */
 .scrolly-footer {
-  background: rgb(var(--gray-dark));
-  color: white;
-  padding: 3rem 2rem;
+  background: var(--rock-deepest);
+  color: var(--text-inverse);
+  padding: var(--space-2xl) var(--space-xl);
   text-align: center;
 }
 
 .scrolly-footer p {
-  margin: 0.5rem 0;
-  opacity: 0.9;
+  margin: var(--space-sm) 0;
+  opacity: 0.85;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .scrolly-footer a {
-  color: white;
+  color: var(--ochre-light);
   text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.scrolly-footer a:hover {
+  color: var(--ochre);
 }
 
 .scrolly-footer .data-note {
-  font-size: 0.9rem;
-  opacity: 0.7;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  opacity: 0.6;
+  margin-top: var(--space-lg);
 }
 
 .scrolly-footer .author-note {
-  font-size: 0.95rem;
-  margin-top: 1rem;
-  opacity: 0.85;
+  font-family: var(--font-mono);
+  font-size: 0.85rem;
+  margin-top: var(--space-lg);
+  opacity: 0.7;
 }
 
-.scrolly-footer .author-note a {
-  color: white;
-  text-decoration: underline;
-}
-
-/* Override component styles for scrolly context */
+/* -----------------------------------------------------------------------------
+   GRAPHIC CONTAINER OVERRIDES
+   ----------------------------------------------------------------------------- */
 .graphic-container .data-source-badge {
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-sm);
 }
 
 .graphic-container .chart-annotation,
 .graphic-container .map-annotation {
-  margin-top: 0.5rem;
-  padding: 0.75rem;
+  margin-top: var(--space-sm);
+  padding: var(--space-sm) var(--space-md);
   font-size: 0.85rem;
 }
 
 .graphic-container .map-legend {
-  margin-top: 0.5rem;
-  padding: 0.5rem;
+  margin-top: var(--space-sm);
+  padding: var(--space-xs) var(--space-sm);
 }
 
-/* Responsive - stack on mobile */
+/* -----------------------------------------------------------------------------
+   RESPONSIVE
+   ----------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .sticky-graphic {
+    width: 55%;
+  }
+
+  .scrolly-text {
+    width: 45%;
+    padding: 0 var(--space-lg);
+  }
+}
+
 @media (max-width: 900px) {
   .scrolly-section {
     flex-direction: column;
@@ -328,7 +471,7 @@
 
   .scrolly-text {
     width: 100%;
-    padding: 0 1rem;
+    padding: 0 var(--space-md);
   }
 
   .narrative-step {
@@ -337,10 +480,11 @@
 
   .narrative-step > * {
     max-width: 100%;
+    padding: var(--space-lg);
   }
 
   .intro-content h1 {
-    font-size: 2rem;
+    font-size: clamp(2.5rem, 12vw, 4rem);
   }
 
   .intro-subtitle {
@@ -348,12 +492,40 @@
   }
 
   .graphic-container {
-    padding: 0.5rem;
-    margin: 0.5rem;
+    padding: var(--space-md);
+    margin: var(--space-sm);
+  }
+
+  .conclusion-content h2 {
+    font-size: 2rem;
   }
 }
 
-/* Ensure Leaflet map fills container properly */
+@media (max-width: 600px) {
+  .intro-content {
+    padding: var(--space-lg);
+  }
+
+  .intro-content h1 {
+    font-size: 2.5rem;
+  }
+
+  .narrative-step h2 {
+    font-size: 1.3rem;
+  }
+
+  .narrative-step p {
+    font-size: 1rem;
+  }
+
+  .key-findings li {
+    font-size: 1.1rem;
+    flex-direction: column;
+    gap: 0;
+  }
+}
+
+/* Leaflet container sizing */
 .graphic-container .leaflet-container {
   height: 350px !important;
   border-radius: 4px;

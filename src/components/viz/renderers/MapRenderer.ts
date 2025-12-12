@@ -5,11 +5,6 @@ import { colors } from '../../../colors';
 import { MergedDistrictData, HighlightMode } from '../types';
 import { OPACITY } from '../constants';
 
-// Distance threshold for "boundary" districts (km)
-const BOUNDARY_THRESHOLD = 10;
-// Very close threshold for white stroke emphasis
-const VERY_CLOSE_THRESHOLD = 5;
-
 interface MapRenderParams {
   g: d3.Selection<SVGGElement, unknown, null, undefined>;
   projection: d3.GeoProjection;
@@ -23,6 +18,7 @@ interface MapRenderParams {
   innerWidth: number;
   innerHeight: number;
   highlightMode?: HighlightMode;
+  boundaryUbigeos?: Set<number>;
   onHover?: (district: MergedDistrictData | null, event?: MouseEvent) => void;
 }
 
@@ -39,6 +35,7 @@ export const renderMap = ({
   innerWidth,
   innerHeight,
   highlightMode = 'none',
+  boundaryUbigeos,
   onHover,
 }: MapRenderParams): void => {
   const pathGenerator = geoPath().projection(projection);
@@ -48,7 +45,7 @@ export const renderMap = ({
   if (z < 1) {
     const mapOpacity = (1 - z);
 
-    // Draw neighboring countries
+    // Draw neighboring countries (same opacity as non-mita districts for consistency)
     neighborFeatures.forEach((feature: any) => {
       g.append('path')
         .datum(feature)
@@ -57,10 +54,10 @@ export const renderMap = ({
         .attr('fill', colors.nonmitaLight)
         .attr('stroke', colors.nonmita)
         .attr('stroke-width', 0.5)
-        .attr('opacity', mapOpacity * OPACITY.mapFade);
+        .attr('opacity', mapOpacity * OPACITY.district);
     });
 
-    // Draw Peru outline
+    // Draw Peru outline (same opacity as non-mita districts for consistency)
     g.append('path')
       .datum(peruFeature)
       .attr('class', 'peru-outline')
@@ -68,14 +65,14 @@ export const renderMap = ({
       .attr('fill', colors.nonmitaLight)
       .attr('stroke', colors.nonmita)
       .attr('stroke-width', 1)
-      .attr('opacity', mapOpacity * OPACITY.mapFade);
+      .attr('opacity', mapOpacity * OPACITY.district);
 
     // Add country labels
     renderCountryLabels(g, projection, peruFeature, neighborFeatures, mapOpacity, innerWidth, innerHeight);
   }
 
   // Draw districts
-  renderDistricts(g, pathGenerator, mergedData, z, polygonOpacity, borderOpacity, showDistricts, highlightMode, onHover);
+  renderDistricts(g, pathGenerator, mergedData, z, polygonOpacity, borderOpacity, showDistricts, highlightMode, boundaryUbigeos, onHover);
 };
 
 const renderCountryLabels = (
@@ -116,25 +113,21 @@ const renderCountryLabels = (
 };
 
 // Helper to determine if a district should be highlighted
-const isHighlighted = (d: MergedDistrictData, highlightMode: HighlightMode): boolean => {
+const isHighlighted = (d: MergedDistrictData, highlightMode: HighlightMode, boundaryUbigeos?: Set<number>): boolean => {
   if (highlightMode === 'none') return false;
   if (highlightMode === 'mita-only') return d.mita === 1;
   if (highlightMode === 'nonmita-only') return d.mita === 0;
   if (highlightMode === 'boundary') {
-    return d.distance !== null && Math.abs(d.distance) <= BOUNDARY_THRESHOLD;
+    // Use pre-computed boundary districts based on polygon adjacency
+    return boundaryUbigeos?.has(d.ubigeo) ?? false;
   }
   return false;
 };
 
-// Helper to check if district is very close to boundary (gets white stroke)
-const isVeryClose = (d: MergedDistrictData): boolean => {
-  return d.distance !== null && Math.abs(d.distance) <= VERY_CLOSE_THRESHOLD;
-};
-
 // Helper to determine if a district should be dimmed
-const isDimmed = (d: MergedDistrictData, highlightMode: HighlightMode): boolean => {
+const isDimmed = (d: MergedDistrictData, highlightMode: HighlightMode, boundaryUbigeos?: Set<number>): boolean => {
   if (highlightMode === 'none') return false;
-  return !isHighlighted(d, highlightMode);
+  return !isHighlighted(d, highlightMode, boundaryUbigeos);
 };
 
 const renderDistricts = (
@@ -146,12 +139,13 @@ const renderDistricts = (
   borderOpacity: number,
   showDistricts: boolean,
   highlightMode: HighlightMode,
+  boundaryUbigeos?: Set<number>,
   onHover?: (district: MergedDistrictData | null, event?: MouseEvent) => void
 ): void => {
   // Sort: non-mita first, then mita on top, then highlighted on top
   const sortedData = [...mergedData].sort((a, b) => {
-    const aHighlighted = isHighlighted(a, highlightMode) ? 1 : 0;
-    const bHighlighted = isHighlighted(b, highlightMode) ? 1 : 0;
+    const aHighlighted = isHighlighted(a, highlightMode, boundaryUbigeos) ? 1 : 0;
+    const bHighlighted = isHighlighted(b, highlightMode, boundaryUbigeos) ? 1 : 0;
     if (aHighlighted !== bHighlighted) return aHighlighted - bHighlighted;
     return a.mita - b.mita;
   });
@@ -163,7 +157,7 @@ const renderDistricts = (
   const getDistrictOpacity = (d: MergedDistrictData): number => {
     const baseOpacity = d.mita === 1 ? OPACITY.district * polygonOpacity : nonMitaOpacity;
     if (highlightMode === 'none') return baseOpacity;
-    if (isDimmed(d, highlightMode)) return baseOpacity * 0.5; // Dim non-highlighted (subtle)
+    if (isDimmed(d, highlightMode, boundaryUbigeos)) return baseOpacity * 0.5; // Dim non-highlighted (subtle)
     return baseOpacity; // Keep highlighted at normal opacity
   };
 
@@ -198,23 +192,20 @@ const renderDistricts = (
     })
     .attr('fill', d => d.mita === 1 ? colors.mita : colors.nonmitaLight)
     .attr('stroke', d => {
-      // Only very close districts get white stroke emphasis
-      if (highlightMode === 'boundary' && isVeryClose(d)) {
-        return colors.effectLine; // White stroke for very close districts
+      // Boundary districts get white stroke emphasis
+      if (highlightMode === 'boundary' && isHighlighted(d, highlightMode, boundaryUbigeos)) {
+        return colors.effectLine; // White stroke for boundary districts
       }
       return d.mita === 1 ? colors.mitaStroke : colors.nonmita;
     })
     .attr('stroke-width', d => {
-      if (highlightMode === 'boundary' && isVeryClose(d)) {
-        return 2.5; // Thick stroke for very close districts
-      }
-      if (highlightMode === 'boundary' && isHighlighted(d, highlightMode)) {
-        return 1.5; // Slightly thicker for boundary districts
+      if (highlightMode === 'boundary' && isHighlighted(d, highlightMode, boundaryUbigeos)) {
+        return 2; // Thicker stroke for boundary districts
       }
       return 1;
     })
     .attr('stroke-opacity', d => {
-      if (highlightMode !== 'none' && isHighlighted(d, highlightMode)) {
+      if (highlightMode !== 'none' && isHighlighted(d, highlightMode, boundaryUbigeos)) {
         return 1; // Full stroke opacity for highlighted
       }
       return borderOpacity;
@@ -228,13 +219,9 @@ const renderDistricts = (
     .on('mouseout', function() {
       if (onHover) onHover(null);
       const datum = d3.select(this).datum() as MergedDistrictData;
-      let baseStrokeWidth = 1;
-      if (highlightMode === 'boundary' && isVeryClose(datum)) {
-        baseStrokeWidth = 2.5;
-      } else if (highlightMode === 'boundary' && isHighlighted(datum, highlightMode)) {
-        baseStrokeWidth = 1.5;
-      }
-      const baseStrokeOpacity = (highlightMode !== 'none' && isHighlighted(datum, highlightMode)) ? 1 : borderOpacity;
+      const isBoundaryDistrict = highlightMode === 'boundary' && isHighlighted(datum, highlightMode, boundaryUbigeos);
+      const baseStrokeWidth = isBoundaryDistrict ? 2 : 1;
+      const baseStrokeOpacity = (highlightMode !== 'none' && isHighlighted(datum, highlightMode, boundaryUbigeos)) ? 1 : borderOpacity;
       d3.select(this).attr('stroke-width', baseStrokeWidth).attr('stroke-opacity', baseStrokeOpacity);
     });
 };

@@ -1,84 +1,76 @@
 // Color constants for the mita visualization
 // SINGLE SOURCE OF TRUTH - change colors here to update everywhere
+//
+// Design System: "Colonial Archive Meets Mining Data"
+// - Mining rock darks (anthracite, obsidian) for mita regions
+// - Weathered stone grays for non-mita
+// - Terracotta accents (Peruvian textiles, earth)
+// - Parchment backgrounds (colonial documents)
 
 // =============================================================================
-// COLOR PALETTES - Uncomment the one you want to use
+// COLOR PALETTE - Mining Rock with Depth
 // =============================================================================
 
-// Slate Blue (mining/mineral theme - matches intro)
+// Main mita palette - anthracite/obsidian inspired
 const MITA_PALETTE = {
-  main: '#4A5568',
-  dark: '#2D3748',
-  darker: '#1A202C',
+  main: '#1a1e28',      // Anthracite - deep blue-black rock
+  dark: '#12151c',      // Deeper ore
+  darker: '#0a0c10',    // Obsidian depths
 };
-
-// // Original Red (treatment convention)
-// const MITA_PALETTE = {
-//   main: '#e74c3c',
-//   dark: '#c0392b',
-//   darker: '#a33025',
-// };
-
-// // Copper/Bronze (mining theme)
-// const MITA_PALETTE = {
-//   main: '#B87333',
-//   dark: '#8B5A2B',
-//   darker: '#6B4423',
-// };
-
-// // Teal (oxidized copper)
-// const MITA_PALETTE = {
-//   main: '#2C7A7B',
-//   dark: '#285E61',
-//   darker: '#1D4044',
-// };
-
-// // Deep Purple (Potosí silver ore)
-// const MITA_PALETTE = {
-//   main: '#6B46C1',
-//   dark: '#553C9A',
-//   darker: '#44337A',
-// };
-
-// // Earth/Ochre (mining earth tones)
-// const MITA_PALETTE = {
-//   main: '#C27C0E',
-//   dark: '#975A16',
-//   darker: '#744210',
-// };
 
 // =============================================================================
 // EXPORTED COLORS
 // =============================================================================
 
 export const colors = {
-  // Mita (treatment) colors - used for mita region fill on map AND scatter
-  mita: '#1A1F2E',           // Dark slate - main mita fill (darker to match map at 0.85 opacity)
-  mitaDark: '#2D3748',       // Slightly lighter dark for accents
-  mitaStroke: '#4A5568',     // Lighter stroke for visible borders on dark mita fill
-  mitaDarker: '#1A202C',     // Darker shade for other uses
-  mitaLabel: '#E2E8F0',      // Light text for labels on dark mita background
+  // Mita (treatment) colors - mining rock inspired
+  mita: MITA_PALETTE.main,
+  mitaDark: MITA_PALETTE.dark,
+  mitaDarker: MITA_PALETTE.darker,
+  mitaStroke: '#363d4d',          // Lighter stroke for visible borders
+  mitaLabel: '#f0ece4',           // Parchment for labels on dark
 
-  // Non-mita (control) colors - gray works with any mita palette
-  nonmita: '#718096',        // Medium gray - stroke color
-  nonmitaLight: '#A0AEC0',   // Light gray - main non-mita fill
+  // Non-mita (control) colors - weathered stone
+  nonmita: '#718096',             // Medium gray - stroke
+  nonmitaLight: '#a0aec0',        // Light gray - fill
 
   // UI colors
-  textDark: '#2D3748',
-  textLight: '#E2E8F0',      // Light text for dark backgrounds
-  textMuted: '#666666',      // Muted text for labels
-  gridLine: '#e0e0e0',
+  textDark: '#0a0c10',            // Near black
+  textBody: '#2d3748',            // Body text
+  textLight: '#f0ece4',           // Light text for dark backgrounds
+  textMuted: '#5a6578',           // Muted text
   white: '#FFFFFF',
-  black: '#0F1219',
+  black: '#0a0c10',
 
-  // Grays for backgrounds
-  grayLight: '#f5f5f5',      // Map background
-  gray: '#607399',
-  grayDark: '#222939',
+  // Backgrounds - parchment/paper
+  parchment: '#f8f4e8',
+  parchmentDark: '#ebe5d6',
+  parchmentCream: '#fdfbf5',
+
+  // Grays
+  grayLight: '#ebe5d6',           // Use parchment-dark for consistency
+  gray: '#5a6578',
+  grayDark: '#1a1e28',
+
+  // Grid
+  gridLine: '#d4d0c4',
+
+  // Accent: Terracotta (Peruvian earth)
+  terracotta: '#c44536',
+  terracottaDark: '#9e3a2d',
+  terracottaLight: '#e07a6d',
+
+  // Secondary: Oxidized copper
+  copper: '#2a9d8f',
+  copperDark: '#1f7268',
+
+  // Gold/ochre highlights
+  ochre: '#d4a373',
+  ochreLight: '#e5c9a8',
 
   // Effect annotation colors
-  effectLine: '#F7FAFC',     // White-ish for effect line
-  effectBg: '#1A202C',       // Dark background for effect label
+  effectLine: '#f8f4e8',          // Parchment for effect line
+  effectBg: '#0a0c10',            // Deep black for effect label
 } as const;
 
 // RGB versions for CSS rgba() usage
@@ -87,10 +79,12 @@ export const colorsRGB = {
   mitaDark: hexToRgb(MITA_PALETTE.dark),
   nonmita: hexToRgb(colors.nonmita),
   nonmitaLight: hexToRgb(colors.nonmitaLight),
-  grayLight: '229, 233, 240',
-  gray: '96, 115, 159',
-  grayDark: '34, 41, 57',
-  black: '15, 18, 25',
+  grayLight: '235, 229, 214',     // parchment-dark
+  gray: '90, 101, 120',
+  grayDark: '26, 30, 40',
+  black: '10, 12, 16',
+  parchment: '248, 244, 232',
+  terracotta: '196, 69, 54',
 } as const;
 
 // Helper to convert hex to RGB string
@@ -103,7 +97,7 @@ function hexToRgb(hex: string): string {
 // Convenience function for components
 export const getMitaColor = (isInside: boolean, variant: 'fill' | 'stroke' = 'fill') => {
   if (isInside) {
-    return variant === 'fill' ? colors.mita : colors.mitaDark;
+    return variant === 'fill' ? colors.mita : colors.mitaStroke;
   }
   return variant === 'fill' ? colors.nonmitaLight : colors.nonmita;
 };
@@ -118,4 +112,7 @@ export const generateCSSVariables = () => `
   --mita-rgb: ${colorsRGB.mita};
   --mita-dark-rgb: ${colorsRGB.mitaDark};
   --nonmita-rgb: ${colorsRGB.nonmita};
+  --terracotta: ${colors.terracotta};
+  --terracotta-dark: ${colors.terracottaDark};
+  --parchment: ${colors.parchment};
 `;

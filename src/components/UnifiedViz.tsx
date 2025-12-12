@@ -16,6 +16,7 @@ import {
   mergeData,
   filterScatterData,
   getAllScatterData,
+  computeBoundaryDistricts,
   createProjection,
   createXScale,
   createYScales,
@@ -35,6 +36,8 @@ interface TooltipData {
   district: MergedDistrictData;
 }
 
+type DotEmphasis = 'normal' | 'pulse' | 'dimmed';
+
 interface UnifiedVizProps {
   morphProgress: number;
   outcome: OutcomeType;
@@ -42,6 +45,8 @@ interface UnifiedVizProps {
   scatterPhase: ScatterPhase;
   zoomLevel: ZoomLevel;
   highlightMode?: HighlightMode;
+  dotEmphasis?: DotEmphasis;
+  showAxisGuide?: boolean;
 }
 
 const UnifiedViz: React.FC<UnifiedVizProps> = ({
@@ -51,6 +56,8 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
   scatterPhase,
   zoomLevel,
   highlightMode = 'none',
+  dotEmphasis = 'normal',
+  showAxisGuide = false,
 }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const [dimensions] = useState(DEFAULT_DIMENSIONS);
@@ -81,6 +88,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
 
   // Memoized data
   const mergedData = useMemo(() => mergeData(), []);
+  const boundaryUbigeos = useMemo(() => computeBoundaryDistricts(mergedData), [mergedData]);
   const { innerWidth, innerHeight } = getInnerDimensions(dimensions, DEFAULT_MARGIN);
 
   // South America features
@@ -190,27 +198,6 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
     [scatterData, currentOutcome]
   );
 
-  // Find representative boundary districts for cards (closest to boundary on each side)
-  const boundaryDistricts = useMemo(() => {
-    // Get districts sorted by absolute distance from boundary
-    const withDistance = mergedData.filter(d => d.distance !== null);
-
-    // Mita districts have negative distance, non-mita have positive
-    // Find closest mita (largest negative = closest to 0) and closest non-mita (smallest positive)
-    const mitaDistricts = withDistance
-      .filter(d => d.isInside)
-      .sort((a, b) => Math.abs(a.distance ?? 0) - Math.abs(b.distance ?? 0));
-    const nonMitaDistricts = withDistance
-      .filter(d => !d.isInside)
-      .sort((a, b) => Math.abs(a.distance ?? 0) - Math.abs(b.distance ?? 0));
-
-    // Return a pair of representative districts (closest on each side)
-    return {
-      mita: mitaDistricts[0] || null,
-      nonMita: nonMitaDistricts[0] || null,
-    };
-  }, [mergedData]);
-
   // Main render effect
   useEffect(() => {
     if (!svgRef.current) return;
@@ -238,8 +225,10 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
       g = svg.append('g')
         .attr('class', 'main-group')
         .attr('transform', `translate(${margin.left},${margin.top})`);
-    } else if (!shouldPreserveElements && !isAtFullScatter) {
-      g.selectAll('*').remove();
+    } else {
+      // Always clear non-essential elements from main group
+      // Keep only elements that should persist across renders
+      g.selectAll('.morphing-district, .fading-district, .district, .district-bg').remove();
     }
 
     // Create projection and scales
@@ -280,6 +269,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
         innerWidth,
         innerHeight,
         highlightMode,
+        boundaryUbigeos,
         onHover: handleDistrictHover,
       });
     } else {
@@ -325,7 +315,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
 
     prevOutcomeRef.current = currentOutcome;
 
-  }, [currentProgress, currentOutcome, scatterPhase, mergedData, scatterData, allScatterData, fittedLines, dimensions, showDistricts, currentZoom, borderOpacity, innerWidth, innerHeight, peruFeature, neighborFeatures, handleDistrictHover, highlightMode]);
+  }, [currentProgress, currentOutcome, scatterPhase, mergedData, scatterData, allScatterData, fittedLines, dimensions, showDistricts, currentZoom, borderOpacity, innerWidth, innerHeight, peruFeature, neighborFeatures, handleDistrictHover, highlightMode, boundaryUbigeos]);
 
   const getTitle = () => {
     if (currentProgress < 0.3) return 'The mita boundary';
@@ -339,11 +329,13 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
         ref={svgRef}
         width="100%"
         viewBox={`0 0 ${dimensions.width} ${dimensions.height}`}
+        className={dotEmphasis !== 'normal' ? `dot-emphasis-${dotEmphasis}` : ''}
         style={{
           maxWidth: '100%',
           height: 'auto',
-          background: currentProgress < 0.3 ? colors.grayLight : 'transparent',
-          transition: 'background 0.3s ease'
+          background: currentProgress < 0.3 ? colors.parchmentDark : 'transparent',
+          transition: 'background 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
+          borderRadius: '4px',
         }}
       />
       {currentProgress < 0.3 && (
@@ -358,55 +350,91 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
           </div>
         </div>
       )}
-      {/* Boundary district info cards */}
-      {highlightMode === 'boundary' && currentProgress < 0.3 && (
-        <div className="boundary-cards" style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none' }}>
-          {boundaryDistricts.mita && (
+      {/* Axis guide overlay for rdd-intro step */}
+      {showAxisGuide && currentProgress >= 1 && (
+        <div
+          className="axis-guide-overlay"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '100%',
+            pointerEvents: 'none',
+            animation: 'fadeIn 0.6s ease-out',
+          }}
+        >
+          {/* X-axis guide */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '12%',
+              left: '50%',
+              transform: 'translateX(-50%)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '4px',
+            }}
+          >
             <div
-              className="boundary-card mita-card"
               style={{
-                position: 'absolute',
-                top: '35%',
-                right: '5%',
-                background: colors.mita,
-                color: colors.textLight,
-                padding: '10px 14px',
-                borderRadius: '6px',
-                fontSize: '11px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-                border: `2px solid ${colors.effectLine}`,
-                maxWidth: '140px',
-                opacity: currentProgress < 0.2 ? 1 : 1 - (currentProgress - 0.2) / 0.1,
-                transition: 'opacity 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+                background: colors.parchmentCream,
+                padding: '4px 10px',
+                borderRadius: '3px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                border: `1px solid ${colors.terracotta}`,
               }}
             >
-              <div style={{ fontWeight: 600, marginBottom: '4px', color: colors.effectLine }}>Mita district</div>
-              <div>{Math.abs(boundaryDistricts.mita.distance ?? 0).toFixed(0)} km inside boundary</div>
+              <span style={{ color: colors.mita, fontSize: '16px' }}>←</span>
+              <span style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: '10px',
+                color: colors.terracottaDark,
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+              }}>
+                Distance
+              </span>
+              <span style={{ color: colors.nonmita, fontSize: '16px' }}>→</span>
             </div>
-          )}
-          {boundaryDistricts.nonMita && (
+          </div>
+          {/* Y-axis guide */}
+          <div
+            style={{
+              position: 'absolute',
+              left: '8%',
+              top: '50%',
+              transform: 'translateY(-50%) rotate(-90deg)',
+            }}
+          >
             <div
-              className="boundary-card nonmita-card"
               style={{
-                position: 'absolute',
-                top: '55%',
-                left: '5%',
-                background: colors.nonmitaLight,
-                color: colors.textDark,
-                padding: '10px 14px',
-                borderRadius: '6px',
-                fontSize: '11px',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.4)',
-                border: `2px solid ${colors.effectLine}`,
-                maxWidth: '140px',
-                opacity: currentProgress < 0.2 ? 1 : 1 - (currentProgress - 0.2) / 0.1,
-                transition: 'opacity 0.3s ease',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '6px',
+                background: colors.parchmentCream,
+                padding: '4px 10px',
+                borderRadius: '3px',
+                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
+                border: `1px solid ${colors.terracotta}`,
               }}
             >
-              <div style={{ fontWeight: 600, marginBottom: '4px' }}>Non-mita district</div>
-              <div>{Math.abs(boundaryDistricts.nonMita.distance ?? 0).toFixed(0)} km outside boundary</div>
+              <span style={{ color: colors.terracotta, fontSize: '14px' }}>↑</span>
+              <span style={{
+                fontFamily: "'JetBrains Mono', monospace",
+                fontSize: '10px',
+                color: colors.terracottaDark,
+                textTransform: 'uppercase',
+                letterSpacing: '0.08em',
+              }}>
+                Outcome
+              </span>
             </div>
-          )}
+          </div>
         </div>
       )}
       {tooltip && (
@@ -414,38 +442,59 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
           className="district-tooltip"
           style={{
             position: 'absolute',
-            left: tooltip.x + 10,
-            top: tooltip.y - 10,
-            background: colors.grayDark,
+            left: tooltip.x + 12,
+            top: tooltip.y - 12,
+            background: colors.mita,
             color: colors.textLight,
-            padding: '8px 12px',
+            padding: '10px 14px',
             borderRadius: '4px',
-            fontSize: '12px',
+            fontSize: '11px',
+            fontFamily: "'JetBrains Mono', monospace",
             pointerEvents: 'none',
             zIndex: 100,
-            boxShadow: '0 2px 8px rgba(0,0,0,0.3)',
+            boxShadow: '0 4px 16px rgba(10, 12, 16, 0.4)',
             maxWidth: '200px',
+            border: `1px solid ${colors.mitaStroke}`,
           }}
         >
-          <div style={{ fontWeight: 600, marginBottom: '4px' }}>
+          <div style={{
+            fontFamily: "'Cormorant Garamond', Georgia, serif",
+            fontWeight: 600,
+            fontSize: '13px',
+            marginBottom: '6px',
+            color: colors.parchment,
+            letterSpacing: '-0.01em',
+          }}>
             District {tooltip.district.ubigeo}
           </div>
-          <div style={{ color: tooltip.district.mita === 1 ? colors.mitaLabel : colors.nonmitaLight }}>
+          <div style={{
+            color: tooltip.district.mita === 1 ? colors.ochreLight : colors.nonmitaLight,
+            textTransform: 'uppercase',
+            fontSize: '10px',
+            letterSpacing: '0.05em',
+            marginBottom: '6px',
+          }}>
             {tooltip.district.mita === 1 ? 'Mita region' : 'Non-mita region'}
           </div>
           {tooltip.district.distance !== null && (
-            <div style={{ marginTop: '4px' }}>
-              Distance: {Math.abs(tooltip.district.distance).toFixed(1)} km {tooltip.district.isInside ? 'inside' : 'outside'}
+            <div style={{ opacity: 0.85 }}>
+              {Math.abs(tooltip.district.distance).toFixed(1)} km {tooltip.district.isInside ? 'inside' : 'outside'}
             </div>
           )}
           {currentOutcome === 'stunting' && tooltip.district.stunting !== null && (
-            <div>Stunting: {(tooltip.district.stunting * 100).toFixed(1)}%</div>
+            <div style={{ marginTop: '4px', color: colors.terracottaLight }}>
+              Stunting: {(tooltip.district.stunting * 100).toFixed(1)}%
+            </div>
           )}
           {currentOutcome === 'consumption' && tooltip.district.consumption !== null && (
-            <div>Consumption: {tooltip.district.consumption.toFixed(2)}</div>
+            <div style={{ marginTop: '4px', color: colors.terracottaLight }}>
+              Consumption: {tooltip.district.consumption.toFixed(2)}
+            </div>
           )}
           {currentOutcome === 'roads' && tooltip.district.roads !== null && (
-            <div>Roads: {tooltip.district.roads.toFixed(0)} m/km²</div>
+            <div style={{ marginTop: '4px', color: colors.terracottaLight }}>
+              Roads: {tooltip.district.roads.toFixed(0)} m/km²
+            </div>
           )}
         </div>
       )}

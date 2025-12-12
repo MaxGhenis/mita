@@ -14,6 +14,8 @@ interface StepData {
   scatterPhase: 'dots' | 'ols' | 'naive-effect' | 'effect';
   zoomLevel: 'peru' | 'mita';
   highlightMode?: 'none' | 'boundary' | 'mita-only' | 'nonmita-only';
+  dotEmphasis?: 'normal' | 'pulse' | 'dimmed';  // Visual emphasis on dots
+  showAxisGuide?: boolean;  // Show axis explanation guides
 }
 
 // All main content steps (between intro and conclusion)
@@ -71,6 +73,7 @@ const mainSteps: StepData[] = [
     showDistricts: true,
     scatterPhase: 'dots',
     zoomLevel: 'mita',
+    dotEmphasis: 'normal',
   },
   {
     id: 'rdd-intro',
@@ -81,6 +84,8 @@ const mainSteps: StepData[] = [
     showDistricts: true,
     scatterPhase: 'dots',
     zoomLevel: 'mita',
+    dotEmphasis: 'pulse',
+    showAxisGuide: true,
   },
   {
     id: 'rdd-ols',
@@ -141,6 +146,7 @@ const mainSteps: StepData[] = [
     showDistricts: true,
     scatterPhase: 'effect',
     zoomLevel: 'mita',
+    dotEmphasis: 'dimmed',
   },
 ];
 
@@ -190,6 +196,8 @@ const ScrollyStory: React.FC = () => {
               scatterPhase={currentStep.scatterPhase}
               zoomLevel={currentStep.zoomLevel}
               highlightMode={currentStep.highlightMode}
+              dotEmphasis={currentStep.dotEmphasis}
+              showAxisGuide={currentStep.showAxisGuide}
             />
           </div>
         </div>

@@ -82,3 +82,69 @@ export const getOutcomeY = (
   if (outcomeKey === 'roads') return d.roadsY;
   return null;
 };
+
+// Tolerance for vertex matching (in degrees, ~100m at Peru's latitude)
+const VERTEX_TOLERANCE = 0.001;
+
+// Check if two vertices are approximately equal
+const verticesMatch = (v1: [number, number], v2: [number, number]): boolean => {
+  return Math.abs(v1[0] - v2[0]) < VERTEX_TOLERANCE &&
+         Math.abs(v1[1] - v2[1]) < VERTEX_TOLERANCE;
+};
+
+// Check if two polygons share at least one edge (two consecutive shared vertices)
+const polygonsShareEdge = (poly1: [number, number][], poly2: [number, number][]): boolean => {
+  // For efficiency, first check if bounding boxes overlap
+  const getBBox = (poly: [number, number][]) => {
+    let minLat = Infinity, maxLat = -Infinity, minLon = Infinity, maxLon = -Infinity;
+    for (const [lat, lon] of poly) {
+      minLat = Math.min(minLat, lat);
+      maxLat = Math.max(maxLat, lat);
+      minLon = Math.min(minLon, lon);
+      maxLon = Math.max(maxLon, lon);
+    }
+    return { minLat, maxLat, minLon, maxLon };
+  };
+
+  const bbox1 = getBBox(poly1);
+  const bbox2 = getBBox(poly2);
+
+  // Check if bounding boxes overlap (with tolerance)
+  const tol = VERTEX_TOLERANCE * 2;
+  if (bbox1.maxLat + tol < bbox2.minLat || bbox2.maxLat + tol < bbox1.minLat ||
+      bbox1.maxLon + tol < bbox2.minLon || bbox2.maxLon + tol < bbox1.minLon) {
+    return false;
+  }
+
+  // Check for shared vertices (at least 2 shared vertices = shared edge)
+  let sharedCount = 0;
+  for (const v1 of poly1) {
+    for (const v2 of poly2) {
+      if (verticesMatch(v1, v2)) {
+        sharedCount++;
+        if (sharedCount >= 2) return true;
+      }
+    }
+  }
+  return false;
+};
+
+// Compute set of ubigeos for districts that border districts of opposite mita type
+export const computeBoundaryDistricts = (mergedData: MergedDistrictData[]): Set<number> => {
+  const boundaryUbigeos = new Set<number>();
+
+  const mitaDistricts = mergedData.filter(d => d.mita === 1);
+  const nonMitaDistricts = mergedData.filter(d => d.mita === 0);
+
+  // For each mita district, check if it borders any non-mita district
+  for (const mita of mitaDistricts) {
+    for (const nonMita of nonMitaDistricts) {
+      if (polygonsShareEdge(mita.polygon, nonMita.polygon)) {
+        boundaryUbigeos.add(mita.ubigeo);
+        boundaryUbigeos.add(nonMita.ubigeo);
+      }
+    }
+  }
+
+  return boundaryUbigeos;
+};

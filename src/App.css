@@ -1,174 +1,288 @@
-/* Design system - colors are injected from colors.ts at runtime */
+/* =============================================================================
+   DESIGN SYSTEM: "Colonial Archive Meets Mining Data"
+
+   Typography:
+   - Cormorant Garamond: Headers, display text (historical gravitas)
+   - Crimson Pro: Body text, narrative (editorial clarity)
+   - JetBrains Mono: Data labels, numbers (technical precision)
+
+   Color Story:
+   - Anthracite/obsidian darks: Mining rock, mineral depth
+   - Aged parchment: Colonial documents, historical context
+   - Burnt terracotta: Peruvian textiles, earth, labor
+   - Oxidized copper: Mine tailings, time's patina
+   ============================================================================= */
+
 :root {
-  /* Mita (treatment) colors - set by App.tsx from colors.ts */
-  --mita: #4A5568;
-  --mita-dark: #2D3748;
-  --mita-darker: #1A202C;
-  --mita-rgb: 74, 85, 104;
+  /* Mining rock palette - anthracite with blue-black depth */
+  --rock-deepest: #0a0c10;
+  --rock-deep: #12151c;
+  --rock-dark: #1a1e28;
+  --rock-medium: #252a36;
+  --rock-light: #363d4d;
+  --rock-surface: #4a5568;
 
-  /* Non-mita (control) colors */
+  /* Mita (treatment) colors - ore/mineral inspired */
+  --mita: #1a1e28;
+  --mita-dark: #12151c;
+  --mita-darker: #0a0c10;
+  --mita-rgb: 26, 30, 40;
+
+  /* Non-mita (control) - weathered stone */
   --nonmita: #718096;
-  --nonmita-light: #A0AEC0;
+  --nonmita-light: #a0aec0;
 
-  /* Text and background */
-  --text-dark: #2D3748;
-  --grid-line: #e0e0e0;
+  /* Accent: Peruvian earth & textile */
+  --terracotta: #c44536;
+  --terracotta-dark: #9e3a2d;
+  --terracotta-light: #e07a6d;
 
-  /* Legacy aliases */
-  --accent: var(--mita-dark);
-  --accent-dark: var(--mita-darker);
-  --black: 15, 18, 25;
-  --gray: 96, 115, 159;
-  --gray-light: 229, 233, 240;
-  --gray-dark: 34, 41, 57;
-  --gray-gradient: rgba(var(--gray-light), 50%), #fff;
-  --box-shadow:
-    0 2px 6px rgba(var(--gray), 25%),
-    0 8px 24px rgba(var(--gray), 33%),
-    0 16px 32px rgba(var(--gray), 33%);
+  /* Secondary: Oxidized copper/patina */
+  --copper: #2a9d8f;
+  --copper-dark: #1f7268;
+  --copper-light: #52b3a5;
+
+  /* Gold/ochre - extracted wealth */
+  --ochre: #d4a373;
+  --ochre-light: #e5c9a8;
+
+  /* Parchment backgrounds */
+  --parchment: #f8f4e8;
+  --parchment-dark: #ebe5d6;
+  --parchment-cream: #fdfbf5;
+
+  /* Text hierarchy */
+  --text-display: var(--rock-deepest);
+  --text-body: #2d3748;
+  --text-muted: #5a6578;
+  --text-light: #f0ece4;
+  --text-inverse: var(--parchment);
+
+  /* Utility */
+  --grid-line: #d4d0c4;
+  --shadow-color: 26, 30, 40;
+
+  /* Shadows - deep, dramatic */
+  --shadow-sm: 0 2px 4px rgba(var(--shadow-color), 0.1);
+  --shadow-md: 0 4px 12px rgba(var(--shadow-color), 0.15);
+  --shadow-lg: 0 8px 32px rgba(var(--shadow-color), 0.2);
+  --shadow-xl: 0 16px 48px rgba(var(--shadow-color), 0.25);
+
+  /* Typography scales */
+  --font-display: 'Cormorant Garamond', 'Georgia', serif;
+  --font-body: 'Crimson Pro', 'Georgia', serif;
+  --font-mono: 'JetBrains Mono', 'Menlo', monospace;
+
+  /* Spacing rhythm */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 2rem;
+  --space-xl: 4rem;
+  --space-2xl: 8rem;
+
+  /* Animation */
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-in-out: cubic-bezier(0.45, 0, 0.55, 1);
+  --duration-fast: 200ms;
+  --duration-normal: 400ms;
+  --duration-slow: 800ms;
 }
 
+/* Reset & base */
 * {
   box-sizing: border-box;
 }
 
+html {
+  font-size: 18px;
+  scroll-behavior: smooth;
+}
+
 body {
-  font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: var(--font-body);
   margin: 0;
   padding: 0;
-  background: linear-gradient(var(--gray-gradient)) no-repeat;
-  background-size: 100% 600px;
-  color: rgb(var(--gray-dark));
-  font-size: 18px;
+  background: var(--parchment);
+  color: var(--text-body);
   line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  /* Subtle paper texture via noise */
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
 }
 
 .App {
   min-height: 100vh;
 }
 
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  color: var(--text-display);
+  line-height: 1.15;
+  margin: 0 0 var(--space-md) 0;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  font-weight: 700;
+}
+
+h2 {
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+}
+
+h3 {
+  font-size: 1.35rem;
+}
+
+p {
+  margin: 0 0 var(--space-md) 0;
+}
+
+/* Links */
 a {
-  color: var(--accent);
+  color: var(--terracotta);
   text-decoration: none;
+  transition: color var(--duration-fast) var(--ease-out-expo);
 }
 
 a:hover {
-  color: var(--accent-dark);
+  color: var(--terracotta-dark);
   text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
 }
 
-h1, h2, h3, h4, h5, h6 {
-  margin: 0 0 0.5rem 0;
-  color: rgb(var(--black));
-  line-height: 1.2;
-}
-
-/* Chart titles */
-.chart-title {
-  margin: 0 0 0.75rem 0;
-  font-size: 1.1rem;
+/* Emphasis */
+strong {
   font-weight: 600;
-  color: rgb(var(--gray-dark));
+  color: var(--text-display);
+}
+
+em {
+  font-style: italic;
+}
+
+/* Chart elements */
+.chart-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text-display);
   text-align: center;
+  margin: 0 0 var(--space-md) 0;
+  letter-spacing: -0.01em;
 }
 
-/* RDD Chart */
-.rdd-chart {
-  width: 100%;
-}
-
+/* Data badges */
 .data-source-badge {
-  background: var(--accent);
-  color: white;
-  padding: 0.4rem 0.8rem;
-  border-radius: 4px;
-  font-size: 0.8rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
   font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  background: var(--rock-dark);
+  color: var(--text-inverse);
+  padding: 0.35rem 0.75rem;
+  border-radius: 2px;
   display: inline-block;
-  margin-bottom: 0.5rem;
+  margin-bottom: var(--space-sm);
 }
 
+/* Stats & annotations */
 .stats-note {
-  margin-top: 0.5rem;
-  font-size: 0.85rem;
-  color: rgb(var(--gray));
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--text-muted);
+  margin-top: var(--space-sm);
 }
 
 .chart-annotation {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: rgb(var(--gray-light));
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--parchment-dark);
   border-radius: 4px;
-  border-left: 4px solid var(--accent);
+  border-left: 3px solid var(--terracotta);
 }
 
 .discontinuity-note {
-  margin: 0 0 0.5rem 0;
-  color: var(--accent-dark);
-  font-size: 0.95rem;
+  font-family: var(--font-display);
+  font-weight: 600;
+  margin: 0 0 var(--space-sm) 0;
+  color: var(--terracotta-dark);
+  font-size: 1rem;
 }
 
 .methodology-note {
   margin: 0;
   font-size: 0.9rem;
-  color: rgb(var(--gray));
+  color: var(--text-muted);
 }
 
-/* Map */
+/* Map elements */
 .mita-map {
   width: 100%;
 }
 
 .map-legend {
   display: flex;
-  gap: 1.5rem;
+  gap: var(--space-lg);
   justify-content: center;
-  margin-top: 1rem;
-  padding: 0.75rem;
-  background: rgb(var(--gray-light));
+  margin-top: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: var(--parchment-dark);
   border-radius: 4px;
 }
 
 .legend-item {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  font-size: 0.9rem;
+  gap: var(--space-sm);
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
 }
 
 .legend-color {
-  width: 20px;
-  height: 20px;
-  border-radius: 3px;
+  width: 18px;
+  height: 18px;
+  border-radius: 2px;
 }
 
 .legend-color.mita-region {
-  background: #222939;
-  border: 2px solid #1A202C;
+  background: var(--rock-dark);
+  border: 2px solid var(--rock-deepest);
 }
 
 .legend-color.outside-region {
-  background: rgba(160, 174, 192, 0.5);
+  background: var(--nonmita-light);
   border: 2px solid var(--nonmita);
 }
 
 .map-annotation {
-  margin-top: 1rem;
-  padding: 1rem;
-  background: rgb(var(--gray-light));
+  margin-top: var(--space-md);
+  padding: var(--space-md);
+  background: var(--parchment-dark);
   border-radius: 4px;
-  border-left: 4px solid var(--mita-dark);
+  border-left: 3px solid var(--rock-dark);
 }
 
 .map-annotation p {
   margin: 0;
   font-size: 0.9rem;
-  color: rgb(var(--gray-dark));
 }
 
 /* Leaflet overrides */
 .leaflet-container {
-  border-radius: 8px;
+  border-radius: 4px;
+  font-family: var(--font-body);
 }
 
 .leaflet-popup-content {
@@ -177,10 +291,95 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .leaflet-popup-content strong {
-  color: rgb(var(--gray-dark));
+  color: var(--text-display);
 }
 
 /* Recharts tooltip */
 .recharts-tooltip-wrapper {
-  font-size: 0.9rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+}
+
+/* Selection highlight */
+::selection {
+  background: var(--terracotta-light);
+  color: var(--rock-deepest);
+}
+
+/* =============================================================================
+   DOT EMPHASIS ANIMATIONS
+   ============================================================================= */
+
+/* Pulse animation for highlighting dots */
+@keyframes dotPulse {
+  0%, 100% {
+    opacity: 0.8;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.15);
+  }
+}
+
+/* Apply pulse to dots when svg has pulse class */
+svg.dot-emphasis-pulse .morph-dot {
+  animation: dotPulse 2s ease-in-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+/* Dimmed state for mechanism/summary step */
+svg.dot-emphasis-dimmed .morph-dot {
+  opacity: 0.35 !important;
+  transition: opacity 0.5s ease;
+}
+
+/* Keep fitted lines and effect annotation fully visible when dots dimmed */
+svg.dot-emphasis-dimmed .inside-line,
+svg.dot-emphasis-dimmed .outside-line,
+svg.dot-emphasis-dimmed .effect-line,
+svg.dot-emphasis-dimmed .effect-label-rect,
+svg.dot-emphasis-dimmed .effect-label-text {
+  opacity: 1 !important;
+}
+
+/* =============================================================================
+   AXIS GUIDE STYLES
+   ============================================================================= */
+
+.axis-guide {
+  pointer-events: none;
+}
+
+.axis-guide-line {
+  stroke: var(--terracotta);
+  stroke-width: 2;
+  stroke-dasharray: 6, 4;
+  opacity: 0.7;
+}
+
+.axis-guide-arrow {
+  fill: var(--terracotta);
+  opacity: 0.8;
+}
+
+.axis-guide-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  fill: var(--terracotta-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* Fade in animation for overlays */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

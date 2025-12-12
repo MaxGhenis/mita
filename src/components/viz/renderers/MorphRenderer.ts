@@ -272,15 +272,17 @@ const renderFullScatterDots = (
   margin: Margin,
   onHover?: (district: MergedDistrictData | null, event?: MouseEvent) => void
 ): void => {
-  svg.selectAll<SVGCircleElement, ScatterDataPoint>('.morph-dot')
+  // Remove any stale morph-dot elements first
+  svg.selectAll('.morph-dot')
     .data(scatterData, (d: any) => d.ubigeo)
     .join(
       enter => enter.append('circle')
-        .attr('class', 'morph-dot')
-        .attr('transform', `translate(${margin.left},${margin.top})`),
+        .attr('class', 'morph-dot'),
       update => update,
       exit => exit.remove()
     )
+    // Set ALL attributes on ALL elements (not just enter)
+    .attr('transform', `translate(${margin.left},${margin.top})`)
     .attr('cx', d => xScale(d.scatterX))
     .attr('cy', d => yScale(d.scatterY))
     .attr('r', 5)
