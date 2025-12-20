@@ -61,8 +61,10 @@ export const createProjection = ({
 };
 
 // Create X scale for scatter plot
+// .clamp(true) ensures values outside domain [-50, 50] are clamped to [0, innerWidth]
+// This prevents dots from being positioned outside the plot bounds
 export const createXScale = (innerWidth: number): d3.ScaleLinear<number, number> => {
-  return d3.scaleLinear().domain([-50, 50]).range([0, innerWidth]);
+  return d3.scaleLinear().domain([-50, 50]).range([0, innerWidth]).clamp(true);
 };
 
 // Create Y scales for all outcomes

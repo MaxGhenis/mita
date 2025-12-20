@@ -240,13 +240,17 @@ const renderMorphingDots = (
       const geoCoord = projection([d.centroidLon, d.centroidLat]);
       const mapX = geoCoord ? geoCoord[0] : 0;
       const scatterX = xScale(d.scatterX);
-      return mapX + (scatterX - mapX) * easedMorphT;
+      const interpolatedX = mapX + (scatterX - mapX) * easedMorphT;
+      // Clamp to plot bounds to prevent dots appearing outside during animation
+      return Math.max(0, Math.min(xScale.range()[1], interpolatedX));
     })
     .attr('cy', d => {
       const geoCoord = projection([d.centroidLon, d.centroidLat]);
       const mapY = geoCoord ? geoCoord[1] : 0;
       const scatterY = yScale(d.scatterY);
-      return mapY + (scatterY - mapY) * easedMorphT;
+      const interpolatedY = mapY + (scatterY - mapY) * easedMorphT;
+      // Clamp to plot bounds to prevent dots appearing outside during animation
+      return Math.max(0, Math.min(yScale.range()[0], interpolatedY));
     })
     .attr('r', dotRadius)
     .attr('fill', d => d.isInside ? colors.mita : colors.nonmitaLight)
