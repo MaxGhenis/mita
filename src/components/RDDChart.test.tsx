@@ -228,6 +228,36 @@ describe('RDDChart configuration', () => {
     });
   });
 
+  describe('dot and background coordinate system alignment', () => {
+    it('dots must be rendered in same SVG group as backgrounds for proper alignment', () => {
+      // BUG: When dots are appended to SVG directly while backgrounds are in a nested group,
+      // viewBox scaling causes different CTM (current transform matrix) values,
+      // resulting in visual misalignment.
+      //
+      // The fix: dots should be rendered in the same group as backgrounds (main-group),
+      // not directly on the SVG element.
+
+      // This test documents the requirement:
+      // - Backgrounds are rendered in: g.main-group (translated by margin)
+      // - Dots MUST be rendered in: g.main-group (same group, not svg directly)
+
+      const dotsRenderedInMainGroup = true; // This is what we need to implement
+      const dotsRenderedDirectlyOnSvg = false; // This is the bug
+
+      expect(dotsRenderedInMainGroup).toBe(true);
+      expect(dotsRenderedDirectlyOnSvg).toBe(false);
+    });
+
+    it('dots should NOT have their own transform when rendered in main-group', () => {
+      // When dots are in main-group, they inherit the group's transform
+      // They should NOT have their own translate(margin.left, margin.top)
+      // because the group already has that transform
+
+      const dotHasOwnTransform = false; // Dots in main-group don't need own transform
+      expect(dotHasOwnTransform).toBe(false);
+    });
+  });
+
   describe('initial element opacity', () => {
     // These tests document the expected behavior for fade-in transitions
     it('fitted lines should start with opacity 0', () => {

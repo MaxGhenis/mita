@@ -55,16 +55,19 @@ export const renderMorph = ({
   }
 
   // Handle different morph states
+  // IMPORTANT: All dots must be rendered to `g` (main-group), not `svg` directly,
+  // to ensure they share the same coordinate system as the background rects.
+  // ViewBox scaling causes different CTM values for svg vs nested groups.
   if (morphT >= 1 && isOutcomeTransition) {
-    renderOutcomeTransition(svg, allScatterData, xScale, yScale, margin, innerHeight, currentOutcome, onHover);
+    renderOutcomeTransition(g, allScatterData, xScale, yScale, innerHeight, currentOutcome, onHover);
   } else if (morphT >= 1 && isPhaseTransition) {
     // During phase transition, ensure dots are properly positioned (not just data rebound)
-    renderFullScatterDots(svg, scatterData, xScale, yScale, margin, onHover);
+    renderFullScatterDots(g, scatterData, xScale, yScale, onHover);
   } else if (morphT < 1) {
     renderMorphingDistricts(g, projection, scatterData, xScale, yScale, easedMorphT);
-    renderMorphingDots(svg, projection, scatterData, xScale, yScale, margin, morphT, easedMorphT, onHover);
+    renderMorphingDots(g, projection, scatterData, xScale, yScale, morphT, easedMorphT, onHover);
   } else {
-    renderFullScatterDots(svg, scatterData, xScale, yScale, margin, onHover);
+    renderFullScatterDots(g, scatterData, xScale, yScale, onHover);
   }
 };
 
@@ -95,21 +98,21 @@ const renderFadingDistricts = (
 };
 
 const renderOutcomeTransition = (
-  svg: d3.Selection<SVGSVGElement, unknown, null, undefined>,
+  g: d3.Selection<SVGGElement, unknown, null, undefined>,
   allScatterData: ScatterDataPoint[],
   xScale: d3.ScaleLinear<number, number>,
   yScale: d3.ScaleLinear<number, number>,
-  margin: Margin,
   innerHeight: number,
   currentOutcome: OutcomeType,
   onHover?: (district: MergedDistrictData | null, event?: MouseEvent) => void
 ): void => {
-  svg.selectAll<SVGCircleElement, ScatterDataPoint>('.morph-dot')
+  // Render dots in main-group (g) to share coordinate system with backgrounds
+  g.selectAll<SVGCircleElement, ScatterDataPoint>('.morph-dot')
     .data(allScatterData, (d: any) => d.ubigeo)
     .join(
       enter => enter.append('circle')
         .attr('class', 'morph-dot')
-        .attr('transform', `translate(${margin.left},${margin.top})`)
+        // No transform needed - dots inherit group's transform
         .attr('cx', d => Math.max(0, Math.min(xScale.range()[1], xScale(d.scatterX))))
         .attr('cy', d => {
           const yVal = getOutcomeY(d, currentOutcome);
@@ -213,12 +216,11 @@ const renderMorphingDistricts = (
 };
 
 const renderMorphingDots = (
-  svg: d3.Selection<SVGSVGElement, unknown, null, undefined>,
+  g: d3.Selection<SVGGElement, unknown, null, undefined>,
   projection: d3.GeoProjection,
   scatterData: ScatterDataPoint[],
   xScale: d3.ScaleLinear<number, number>,
   yScale: d3.ScaleLinear<number, number>,
-  margin: Margin,
   morphT: number,
   easedMorphT: number,
   onHover?: (district: MergedDistrictData | null, event?: MouseEvent) => void
@@ -228,12 +230,13 @@ const renderMorphingDots = (
   const dotOpacity = Math.min(1, (morphT - MORPH_TIMING.dotFadeStart) / (MORPH_TIMING.dotFadeEnd - MORPH_TIMING.dotFadeStart));
   const dotRadius = 5 * easedMorphT;
 
-  svg.selectAll<SVGCircleElement, ScatterDataPoint>('.morph-dot')
+  // Render dots in main-group (g) to share coordinate system with backgrounds
+  g.selectAll<SVGCircleElement, ScatterDataPoint>('.morph-dot')
     .data(scatterData, (d: any) => d.ubigeo)
     .join(
       enter => enter.append('circle')
-        .attr('class', 'morph-dot')
-        .attr('transform', `translate(${margin.left},${margin.top})`),
+        .attr('class', 'morph-dot'),
+        // No transform needed - dots inherit group's transform
       update => update,
       exit => exit.remove()
     )
@@ -270,15 +273,14 @@ const renderMorphingDots = (
 };
 
 const renderFullScatterDots = (
-  svg: d3.Selection<SVGSVGElement, unknown, null, undefined>,
+  g: d3.Selection<SVGGElement, unknown, null, undefined>,
   scatterData: ScatterDataPoint[],
   xScale: d3.ScaleLinear<number, number>,
   yScale: d3.ScaleLinear<number, number>,
-  margin: Margin,
   onHover?: (district: MergedDistrictData | null, event?: MouseEvent) => void
 ): void => {
-  // Remove any stale morph-dot elements first
-  svg.selectAll('.morph-dot')
+  // Render dots in main-group (g) to share coordinate system with backgrounds
+  g.selectAll('.morph-dot')
     .data(scatterData, (d: any) => d.ubigeo)
     .join(
       enter => enter.append('circle')
@@ -286,9 +288,8 @@ const renderFullScatterDots = (
       update => update,
       exit => exit.remove()
     )
-    // Set ALL attributes on ALL elements (not just enter)
-    .attr('transform', `translate(${margin.left},${margin.top})`)
-    // Explicitly clamp cx/cy to plot bounds (xScale.clamp(true) should handle this, but be explicit)
+    // No transform needed - dots inherit group's transform
+    // Explicitly clamp cx/cy to plot bounds
     .attr('cx', d => Math.max(0, Math.min(xScale.range()[1], xScale(d.scatterX))))
     .attr('cy', d => Math.max(0, Math.min(yScale.range()[0], yScale(d.scatterY))))
     .attr('r', 5)
