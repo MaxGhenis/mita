@@ -1,4 +1,32 @@
-// Morph transition rendering (districts to dots)
+/**
+ * Morph transition rendering (districts to dots)
+ *
+ * ============================================================================
+ * CRITICAL: SVG COORDINATE SYSTEM ALIGNMENT
+ * ============================================================================
+ *
+ * All dots MUST be rendered to `g` (main-group), NOT directly to `svg`.
+ *
+ * When SVG uses viewBox for responsive scaling, elements at different nesting
+ * levels receive different CTM (Current Transform Matrix) values. This causes
+ * visual misalignment even when transforms appear identical in code.
+ *
+ * WRONG (causes ~20-30px misalignment):
+ *   svg.selectAll('.morph-dot')
+ *     .attr('transform', `translate(${margin.left},${margin.top})`)
+ *
+ * CORRECT (dots align with backgrounds):
+ *   g.selectAll('.morph-dot')  // g = main-group, same parent as backgrounds
+ *     // No transform needed - inherits from group
+ *
+ * To verify alignment, check CTM values in browser DevTools:
+ *   document.querySelector('.morph-dot').getCTM()
+ *   document.querySelector('.mita-bg').getCTM()
+ *   // These MUST have identical a, d, e, f values
+ *
+ * See docs/ARCHITECTURE.md for full explanation.
+ * ============================================================================
+ */
 import * as d3 from 'd3';
 import { colors } from '../../../colors';
 import { ScatterDataPoint, MergedDistrictData, OutcomeType, Margin } from '../types';

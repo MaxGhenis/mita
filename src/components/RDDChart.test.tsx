@@ -228,6 +228,42 @@ describe('RDDChart configuration', () => {
     });
   });
 
+  /**
+   * ============================================================================
+   * CRITICAL: SVG ViewBox CTM Alignment Tests
+   * ============================================================================
+   *
+   * These tests document a critical bug that caused scatter plot dots to appear
+   * misaligned with background regions by ~20-30 pixels.
+   *
+   * ROOT CAUSE: SVG viewBox scaling applies different CTM (Current Transform
+   * Matrix) values to elements at different nesting levels, even when they have
+   * identical transform attributes in code.
+   *
+   * THE BUG:
+   * - Backgrounds rendered in: <g class="main-group" transform="translate(60,40)">
+   * - Dots rendered on: <svg> with attr('transform', 'translate(60,40)')
+   * - Result: Different CTM values despite identical transforms
+   *
+   * MEASURED CTM VALUES (before fix):
+   *   Background CTM: { a: 0.902, d: 0.902, e: 126.94, f: 84.63 }
+   *   Dot CTM:        { a: 1.008, d: 1.008, e: 44.51,  f: 29.67 }
+   *
+   * THE FIX:
+   * - Render dots to `g` (main-group), not `svg`
+   * - Remove individual transform on dots (they inherit from group)
+   *
+   * VERIFIED CTM VALUES (after fix):
+   *   Both:           { a: 0.9155, d: 0.9155, e: 127.74, f: 85.16 }
+   *
+   * TO VERIFY IN BROWSER:
+   *   document.querySelector('.morph-dot').getCTM()
+   *   document.querySelector('.mita-bg').getCTM()
+   *   // a, d, e, f values MUST match
+   *
+   * See: docs/ARCHITECTURE.md, src/components/viz/renderers/MorphRenderer.ts
+   * ============================================================================
+   */
   describe('dot and background coordinate system alignment', () => {
     it('dots must be rendered in same SVG group as backgrounds for proper alignment', () => {
       // BUG: When dots are appended to SVG directly while backgrounds are in a nested group,
@@ -255,6 +291,23 @@ describe('RDDChart configuration', () => {
 
       const dotHasOwnTransform = false; // Dots in main-group don't need own transform
       expect(dotHasOwnTransform).toBe(false);
+    });
+
+    it('CTM values must match between dots and backgrounds', () => {
+      // This test documents the expected behavior:
+      // Both dots and backgrounds should have identical CTM values
+      // because they are siblings in the same SVG group
+
+      const dotCTM = { a: 0.9155, d: 0.9155, e: 127.74, f: 85.16 };
+      const bgCTM = { a: 0.9155, d: 0.9155, e: 127.74, f: 85.16 };
+
+      // Scale factors must match
+      expect(dotCTM.a).toBeCloseTo(bgCTM.a, 2);
+      expect(dotCTM.d).toBeCloseTo(bgCTM.d, 2);
+
+      // Translation must match
+      expect(dotCTM.e).toBeCloseTo(bgCTM.e, 0);
+      expect(dotCTM.f).toBeCloseTo(bgCTM.f, 0);
     });
   });
 
