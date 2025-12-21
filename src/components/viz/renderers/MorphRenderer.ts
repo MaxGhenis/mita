@@ -58,9 +58,8 @@ export const renderMorph = ({
   if (morphT >= 1 && isOutcomeTransition) {
     renderOutcomeTransition(svg, allScatterData, xScale, yScale, margin, innerHeight, currentOutcome, onHover);
   } else if (morphT >= 1 && isPhaseTransition) {
-    // Dots stay the same during phase transition
-    svg.selectAll<SVGCircleElement, ScatterDataPoint>('.morph-dot')
-      .data(scatterData, (d: any) => d.ubigeo);
+    // During phase transition, ensure dots are properly positioned (not just data rebound)
+    renderFullScatterDots(svg, scatterData, xScale, yScale, margin, onHover);
   } else if (morphT < 1) {
     renderMorphingDistricts(g, projection, scatterData, xScale, yScale, easedMorphT);
     renderMorphingDots(svg, projection, scatterData, xScale, yScale, margin, morphT, easedMorphT, onHover);
@@ -111,10 +110,10 @@ const renderOutcomeTransition = (
       enter => enter.append('circle')
         .attr('class', 'morph-dot')
         .attr('transform', `translate(${margin.left},${margin.top})`)
-        .attr('cx', d => xScale(d.scatterX))
+        .attr('cx', d => Math.max(0, Math.min(xScale.range()[1], xScale(d.scatterX))))
         .attr('cy', d => {
           const yVal = getOutcomeY(d, currentOutcome);
-          return yVal !== null ? yScale(yVal) : innerHeight / 2;
+          return yVal !== null ? Math.max(0, Math.min(yScale.range()[0], yScale(yVal))) : innerHeight / 2;
         })
         .attr('r', 5)
         .attr('fill', d => d.isInside ? colors.mita : colors.nonmitaLight)
@@ -132,6 +131,8 @@ const renderOutcomeTransition = (
           .attr('opacity', d => getOutcomeY(d, currentOutcome) !== null ? OPACITY.dot : 0)),
       update => update
         .style('cursor', 'pointer')
+        // Ensure cx is clamped (might have been set incorrectly during morph)
+        .attr('cx', d => Math.max(0, Math.min(xScale.range()[1], xScale(d.scatterX))))
         .on('mousemove', function(event: MouseEvent, d: ScatterDataPoint) {
           if (onHover) onHover(d, event);
           d3.select(this).attr('r', 7).attr('opacity', 1);
@@ -143,7 +144,7 @@ const renderOutcomeTransition = (
         .call(update => update.transition().duration(600)
           .attr('cy', d => {
             const yVal = getOutcomeY(d, currentOutcome);
-            return yVal !== null ? yScale(yVal) : innerHeight / 2;
+            return yVal !== null ? Math.max(0, Math.min(yScale.range()[0], yScale(yVal))) : innerHeight / 2;
           })
           .attr('opacity', d => getOutcomeY(d, currentOutcome) !== null ? OPACITY.dot : 0)),
       exit => exit
@@ -287,8 +288,9 @@ const renderFullScatterDots = (
     )
     // Set ALL attributes on ALL elements (not just enter)
     .attr('transform', `translate(${margin.left},${margin.top})`)
-    .attr('cx', d => xScale(d.scatterX))
-    .attr('cy', d => yScale(d.scatterY))
+    // Explicitly clamp cx/cy to plot bounds (xScale.clamp(true) should handle this, but be explicit)
+    .attr('cx', d => Math.max(0, Math.min(xScale.range()[1], xScale(d.scatterX))))
+    .attr('cy', d => Math.max(0, Math.min(yScale.range()[0], yScale(d.scatterY))))
     .attr('r', 5)
     .attr('fill', d => d.isInside ? colors.mita : colors.nonmitaLight)
     .attr('opacity', OPACITY.dot)
