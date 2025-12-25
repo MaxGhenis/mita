@@ -90,7 +90,7 @@ const mainSteps: StepData[] = [
   {
     id: 'rdd-ols',
     title: 'Finding the trend',
-    text: 'We fit separate regression lines on each side of the boundary. These lines show the average relationship between distance and stunting within each region.',
+    text: 'We fit separate regression lines on each side of the boundary. These illustrative lines show the average relationship between distance and stunting within each region. (The paper uses richer polynomial specifications with geographic controls.)',
     morphProgress: 1,
     outcome: 'stunting',
     showDistricts: true,
@@ -140,7 +140,7 @@ const mainSteps: StepData[] = [
   {
     id: 'mechanism',
     title: 'Why do effects persist?',
-    text: 'The mita blocked hacienda formation, reducing long-term investments in land, infrastructure, and human capital. These institutional differences compounded over centuries, producing the disparities we observe today.',
+    text: 'Dell explores several mechanisms. One key channel: the mita blocked hacienda formation outside the catchment area, where large landowners invested in roads and public goods to attract workers. These institutional differences compounded over centuries, producing the disparities we observe today.',
     morphProgress: 1,
     outcome: 'roads',
     showDistricts: true,
@@ -261,7 +261,7 @@ const ScrollyStory: React.FC = () => {
         <p className="data-note">
           Visualizations use real district boundaries and outcome data from the paper's{' '}
           <a href="https://www.econometricsociety.org/publications/econometrica/2010/11/01/persistent-effects-perus-mining-mita" target="_blank" rel="noopener noreferrer">replication files</a>.
-          Fitted lines show OLS regressions of outcomes on distance to the mita boundary.
+          Fitted lines are illustrative OLS regressions; the paper's estimates use polynomial RD with controls for elevation, slope, and other geographic factors.
         </p>
         <p className="author-note">
           Built by <a href="https://maxghenis.com" target="_blank" rel="noopener noreferrer">Max Ghenis</a>

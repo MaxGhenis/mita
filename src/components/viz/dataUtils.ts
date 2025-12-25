@@ -35,7 +35,9 @@ export const filterScatterData = (
 ): ScatterDataPoint[] => {
   return mergedData.filter(d => {
     const value = d[currentOutcome];
-    return d.distance !== null && value !== null && value > 0;
+    // Roads can legitimately be 0; stunting/consumption zeros are likely missing data
+    const minValue = currentOutcome === 'roads' ? 0 : 0.001;
+    return d.distance !== null && value !== null && value >= minValue;
   }).map(d => {
     const rawValue = d[currentOutcome] as number;
     const value = currentOutcome === 'stunting' ? rawValue * 100 : rawValue;
@@ -54,10 +56,11 @@ export const filterScatterData = (
 // Get all scatter data with any outcome (for transitions)
 export const getAllScatterData = (mergedData: MergedDistrictData[]): Omit<ScatterDataPoint, 'scatterY'>[] => {
   return mergedData.filter(d => {
+    // Roads can legitimately be 0; stunting/consumption zeros are likely missing data
     return d.distance !== null && (
       (d.stunting !== null && d.stunting > 0) ||
       (d.consumption !== null && d.consumption > 0) ||
-      (d.roads !== null && d.roads > 0)
+      (d.roads !== null && d.roads >= 0)
     );
   }).map(d => {
     const flippedDistance = d.isInside ? Math.abs(d.distance as number) : -Math.abs(d.distance as number);
@@ -67,7 +70,7 @@ export const getAllScatterData = (mergedData: MergedDistrictData[]): Omit<Scatte
       scatterY: 0, // Placeholder, use specific outcome Y values
       stuntingY: d.stunting !== null && d.stunting > 0 ? d.stunting * 100 : null,
       consumptionY: d.consumption !== null && d.consumption > 0 ? d.consumption : null,
-      roadsY: d.roads !== null && d.roads > 0 ? d.roads : null,
+      roadsY: d.roads !== null && d.roads >= 0 ? d.roads : null,
     };
   });
 };
