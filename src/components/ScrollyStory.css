@@ -428,6 +428,19 @@
   opacity: 0.85;
 }
 
+.conclusion-note a,
+.conclusion-content a {
+  color: var(--ochre-light);
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
+
+.conclusion-note a:hover,
+.conclusion-content a:hover {
+  color: var(--ochre);
+}
+
 /* -----------------------------------------------------------------------------
    FOOTER
    ----------------------------------------------------------------------------- */
