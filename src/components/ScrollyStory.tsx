@@ -1,7 +1,8 @@
+'use client';
+
 import React, { useState } from 'react';
 import { Scrollama, Step } from 'react-scrollama';
 import UnifiedViz from './UnifiedViz';
-import './ScrollyStory.css';
 
 interface StepData {
   id: string;
@@ -161,7 +162,7 @@ const ScrollyStory: React.FC = () => {
   };
 
   return (
-    <div className="scrolly-container">
+    <div className="scrolly-container relative w-full">
       {/* Floating GitHub link */}
       <a
         href="https://github.com/MaxGhenis/mita"
@@ -232,10 +233,11 @@ const ScrollyStory: React.FC = () => {
       <section className="conclusion-section">
         <div className="conclusion-visual">
           <div className="conclusion-content">
-            <h2>History casts a long shadow</h2>
+            <h2>History casts a long shadow — or does it?</h2>
             <p className="conclusion-summary">
-              Dell's study shows that institutions can shape economic outcomes for centuries.
-              The mita's arbitrary boundary provides a rare opportunity to measure these persistent effects precisely.
+              Dell's study argues that institutions can shape economic outcomes for centuries,
+              and the mita's arbitrary boundary provides a rare opportunity to measure these persistent effects.
+              However, subsequent work has challenged whether the effects truly persist to the present day.
             </p>
             <div className="key-findings">
               <h3>Key findings</h3>
@@ -246,7 +248,9 @@ const ScrollyStory: React.FC = () => {
               </ul>
             </div>
             <p className="conclusion-note">
-              These effects persist 200+ years after Spain abolished the mita.
+              Dell's estimates suggest these effects persist 200+ years after abolition,
+              though <a href="https://www.sciencedirect.com/science/article/abs/pii/S001449832400010X" target="_blank" rel="noopener noreferrer">recent work</a> finds
+              the effects may have faded during the colonial era.
             </p>
           </div>
         </div>
@@ -262,6 +266,13 @@ const ScrollyStory: React.FC = () => {
           Visualizations use real district boundaries and outcome data from the paper's{' '}
           <a href="https://www.econometricsociety.org/publications/econometrica/2010/11/01/persistent-effects-perus-mining-mita" target="_blank" rel="noopener noreferrer">replication files</a>.
           Fitted lines are illustrative OLS regressions; the paper's estimates use polynomial RD with controls for elevation, slope, and other geographic factors.
+        </p>
+        <p className="data-note">
+          <strong>Subsequent literature:</strong>{' '}
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S001449832400010X" target="_blank" rel="noopener noreferrer">Arroyo Abad &amp; Maurer (2024)</a>{' '}
+          argue the mita's effects dissipated during the colonial era itself, finding no significant differences in literacy, land access, road density, or luminosity from the 19th century onward.{' '}
+          <a href="https://www.sciencedirect.com/science/article/abs/pii/S0022199624001545" target="_blank" rel="noopener noreferrer">Kelly (2020)</a>{' '}
+          shows that many persistence studies, including this one, are sensitive to spatial autocorrelation—adding basic spatial controls often weakens results substantially.
         </p>
         <p className="author-note">
           Built by <a href="https://maxghenis.com" target="_blank" rel="noopener noreferrer">Max Ghenis</a>
