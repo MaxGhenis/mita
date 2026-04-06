@@ -11,17 +11,15 @@ The visualization presents Dell's original findings alongside notes on subsequen
 - `bun dev` starts the Next.js dev server.
 - `bun run build` creates a static export in `out/`.
 - `bun run test` runs the Vitest suite.
-- `bun run deploy` publishes `out/` via `gh-pages`.
-
 ## Stack
 
 - Next.js 16 App Router
 - React 19
 - Tailwind CSS 4
 - Vitest for tests
-- GitHub Pages deployment from the static `out/` export
+- Vercel deployment (served at maxghenis.com/mita via rewrite)
 
 ## Notes
 
-- Production builds export under `/mita`, matching the GitHub Pages path.
+- Production builds use `basePath: /mita` (set via `NEXT_PUBLIC_BASE_PATH` env var on Vercel).
 - The existing D3/scrollytelling CSS has been preserved; Tailwind is now configured for incremental refactors instead of a risky full rewrite.
