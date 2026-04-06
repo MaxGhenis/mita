@@ -430,7 +430,7 @@
 
 .conclusion-note a,
 .conclusion-content a {
-  color: var(--ochre-light);
+  color: var(--parchment);
   text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
@@ -438,7 +438,7 @@
 
 .conclusion-note a:hover,
 .conclusion-content a:hover {
-  color: var(--ochre);
+  color: #ffffff;
 }
 
 /* -----------------------------------------------------------------------------
@@ -468,6 +468,10 @@
 
 .scrolly-footer a:hover {
   color: var(--ochre);
+}
+
+.scrolly-footer strong {
+  color: inherit;
 }
 
 .scrolly-footer .data-note {
