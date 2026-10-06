@@ -10,6 +10,8 @@
 
 # production
 /build
+/out
+/.next
 
 # misc
 .DS_Store
@@ -25,3 +27,4 @@ yarn-error.log*
 # Large data files - keep only processed JSON
 data/
 !src/data/
+.vercel

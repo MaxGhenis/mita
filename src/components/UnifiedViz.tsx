@@ -1,5 +1,8 @@
+'use client';
+
 import React, { useEffect, useRef, useMemo, useState, useCallback } from 'react';
 import * as d3 from 'd3';
+import type { FeatureCollection, Geometry } from 'geojson';
 import southAmerica from '../data/southAmerica.json';
 import { colors } from '../colors';
 import {
@@ -92,9 +95,9 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
   const { innerWidth, innerHeight } = getInnerDimensions(dimensions, DEFAULT_MARGIN);
 
   // South America features
-  const saFeatures = (southAmerica as any).features;
-  const peruFeature = saFeatures.find((f: any) => f.properties?.name === 'Peru');
-  const neighborFeatures = saFeatures.filter((f: any) => f.properties?.name !== 'Peru');
+  const saFeatures = (southAmerica as unknown as FeatureCollection<Geometry, { name: string }>).features;
+  const peruFeature = saFeatures.find(f => f.properties?.name === 'Peru')!;
+  const neighborFeatures = saFeatures.filter(f => f.properties?.name !== 'Peru');
 
   // Animation effects
   useEffect(() => {
@@ -121,6 +124,8 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
     return () => {
       if (animationRef.current) cancelAnimationFrame(animationRef.current);
     };
+    // Animation intentionally reads currentProgress only at start.
+    // Including it in deps would restart the animation on every frame.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [morphProgress]);
 
@@ -152,6 +157,8 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
     return () => {
       if (zoomAnimationRef.current) cancelAnimationFrame(zoomAnimationRef.current);
     };
+    // Animation intentionally reads currentZoom only at start.
+    // Including it in deps would restart the animation on every frame.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [zoomLevel]);
 
@@ -179,6 +186,8 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
     return () => {
       if (borderAnimationRef.current) cancelAnimationFrame(borderAnimationRef.current);
     };
+    // Animation intentionally reads borderOpacity only at start.
+    // Including it in deps would restart the animation on every frame.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showDistricts]);
 
@@ -240,7 +249,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
       innerHeight,
     });
     const xScale = createXScale(innerWidth);
-    const yScales = createYScales(allScatterData as any, innerHeight);
+    const yScales = createYScales(allScatterData, innerHeight);
     const yScale = yScales[currentOutcome];
 
     // Render scatter backgrounds and labels (always, opacity controlled by t)
@@ -284,7 +293,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
         yScale,
         mergedData,
         scatterData,
-        allScatterData: allScatterData as any,
+        allScatterData: allScatterData,
         scatterUbigeos,
         morphT,
         currentOutcome,
@@ -323,7 +332,7 @@ const UnifiedViz: React.FC<UnifiedVizProps> = ({
   };
 
   return (
-    <div className="unified-viz" style={{ position: 'relative' }}>
+    <div className="unified-viz relative" style={{ position: 'relative' }}>
       <h3 className="chart-title">{getTitle()}</h3>
       <svg
         ref={svgRef}

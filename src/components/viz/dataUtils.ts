@@ -54,7 +54,7 @@ export const filterScatterData = (
 };
 
 // Get all scatter data with any outcome (for transitions)
-export const getAllScatterData = (mergedData: MergedDistrictData[]): Omit<ScatterDataPoint, 'scatterY'>[] => {
+export const getAllScatterData = (mergedData: MergedDistrictData[]): ScatterDataPoint[] => {
   return mergedData.filter(d => {
     // Roads can legitimately be 0; stunting/consumption zeros are likely missing data
     return d.distance !== null && (

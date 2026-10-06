@@ -1,11 +1,12 @@
 // Scale and projection utilities
 import * as d3 from 'd3';
 import { geoMercator } from 'd3-geo';
+import type { Feature, Geometry } from 'geojson';
 import { MergedDistrictData, ScatterDataPoint, OutcomeType, Dimensions, Margin } from './types';
 
 interface ProjectionParams {
   mergedData: MergedDistrictData[];
-  peruFeature: any;
+  peruFeature: Feature<Geometry, { name: string }>;
   currentZoom: number; // 0 = peru, 1 = mita
   innerWidth: number;
   innerHeight: number;

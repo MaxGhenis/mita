@@ -53,10 +53,13 @@
 
   /* Text hierarchy */
   --text-display: var(--rock-deepest);
+  --text-dark: var(--rock-deepest);
   --text-body: #2d3748;
   --text-muted: #5a6578;
   --text-light: #f0ece4;
   --text-inverse: var(--parchment);
+  --parchment-rgb: 248, 244, 232;
+  --terracotta-rgb: 196, 69, 54;
 
   /* Utility */
   --grid-line: #d4d0c4;
